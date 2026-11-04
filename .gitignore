@@ -1,0 +1,34 @@
+# Секреты: никогда не коммитить
+.env
+.env.*
+!.env.example
+
+# Зависимости и сборка
+node_modules/
+.expo/
+dist/
+web-build/
+*.tsbuildinfo
+
+# Нативные сборки
+android/
+ios/
+*.apk
+*.aab
+*.ipa
+*.jks
+*.keystore
+*.p8
+*.p12
+*.mobileprovision
+
+# Supabase локально
+supabase/.temp/
+supabase/.branches/
+
+# Система и редакторы
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
