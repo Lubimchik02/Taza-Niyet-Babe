@@ -12,8 +12,9 @@ import { useTheme } from '@/theme/ThemeProvider';
 
 import type { SessionInfo, ShiftRow } from '../api';
 import type { DraftPatch } from '../drafts';
-import { clockOf, MINUTE_STEP, replaceClock, splitMinutes, stepMinutes } from '../minutes';
+import { clockOf, MINUTE_STEP, replaceClock, stepMinutes } from '../minutes';
 import { useAdjustSession } from '../queries';
+import { useFormatDuration } from '@/lib/use-format-duration';
 
 export interface ConfirmDraft {
   minutes: number;
@@ -47,12 +48,7 @@ export function ConfirmRow({ row, draft, onPatch, showErrors }: ConfirmRowProps)
   const { t } = useTranslation();
   const { colors, spacing } = useTheme();
   const changed = draft.minutes !== row.rounded_minutes;
-  const duration = (minutes: number) => {
-    const { hours, minutes: m } = splitMinutes(minutes);
-    return hours > 0
-      ? t('attendance.hoursMinutes', { hours, minutes: m })
-      : t('attendance.minutesOnly', { minutes: m });
-  };
+  const duration = useFormatDuration();
 
   return (
     <Card

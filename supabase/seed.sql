@@ -244,31 +244,7 @@ select c.id, 'confirmed_minutes', '165', c.confirmed_minutes::text,
 from public.hour_confirmations c
 where c.user_id = 'f0000000-0000-4000-8000-000000000002' and c.quest_id = '9e000000-0000-4000-8000-000000000001';
 
--- Баллы по формуле этапа 6: база_сложности × часы × множитель(округлённая средняя оценка).
-insert into public.points_ledger (user_id, org_id, quest_id, confirmation_id, points, reason)
-select c.user_id, c.org_id, c.quest_id, c.id,
-       round(
-         (case q.difficulty when 'easy' then 10 when 'medium' then 20 when 'hard' then 35 else 50 end)
-         * c.confirmed_minutes / 60.0
-         * (case round((c.rating_quality + c.rating_activity + c.rating_teamwork) / 3.0)
-              when 1 then 0.6 when 2 then 0.8 when 3 then 1.0 when 4 then 1.15 else 1.3 end)
-       )::int,
-       'quest_completed'
-from public.hour_confirmations c
-join public.quests q on q.id = c.quest_id;
-
--- Опыт навыков и достижения участников завершённых квестов.
-insert into public.user_skills (user_id, skill_id, xp)
-select c.user_id, qs.skill_id, sum(qs.xp)
-from public.hour_confirmations c
-join public.quest_skills qs on qs.quest_id = c.quest_id
-group by c.user_id, qs.skill_id;
-
-insert into public.user_achievements (user_id, achievement_id, org_id)
-select distinct c.user_id, a.id, c.org_id
-from public.hour_confirmations c
-cross join public.achievements a
-where a.code = 'first_quest';
+-- Баллы, опыт навыков и достижения начисляет триггер при подтверждении часов (этап 6).
 
 -- Открытый спор: vol6 не согласна с часами.
 insert into public.disputes (confirmation_id, comment)

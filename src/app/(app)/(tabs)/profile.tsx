@@ -6,9 +6,11 @@ import { View } from 'react-native';
 import { AppText } from '@/components/ui/AppText';
 import { Button } from '@/components/ui/Button';
 import { ChoiceGroup } from '@/components/ui/ChoiceGroup';
+import { Toggle } from '@/components/ui/Toggle';
 import { Screen } from '@/components/ui/Screen';
 import { mapAuthError, signOut } from '@/features/auth/api';
 import { useSession } from '@/features/auth/session-store';
+import { useHideFromLeaderboard } from '@/features/benefit/queries';
 import { NameForm } from '@/features/profile/components/NameForm';
 import { useMyProfile } from '@/features/profile/queries';
 import { useSettings, type ThemePreference } from '@/features/settings/settings-store';
@@ -20,6 +22,7 @@ export default function ProfileScreen() {
   const { t } = useTranslation();
   const user = useSession((s) => s.session?.user);
   const profile = useMyProfile();
+  const hide = useHideFromLeaderboard();
   const { language, theme, setLanguage, setTheme } = useSettings();
   const [signingOut, setSigningOut] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,6 +57,15 @@ export default function ProfileScreen() {
       </View>
 
       {profile.data ? <NameForm initialName={profile.data.full_name} /> : null}
+      {profile.data ? (
+        <Toggle
+          label={t('profile.hideFromLeaderboard')}
+          hint={t('profile.hideFromLeaderboardHint')}
+          value={profile.data.hide_from_leaderboard}
+          disabled={hide.isPending}
+          onChange={(value) => hide.mutate(value)}
+        />
+      ) : null}
 
       <Button
         variant="secondary"

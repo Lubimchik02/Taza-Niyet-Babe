@@ -540,6 +540,31 @@ export type Database = {
           },
         ];
       };
+      levels: {
+        Row: {
+          code: string;
+          created_at: string;
+          min_points: number;
+          position: number;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          code: string;
+          created_at?: string;
+          min_points: number;
+          position: number;
+          updated_at?: string;
+        };
+        Update: {
+          code?: string;
+          created_at?: string;
+          min_points?: number;
+          position?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       memberships: {
         Row: {
           created_at: string;
@@ -798,6 +823,28 @@ export type Database = {
           },
         ];
       };
+      points_rules: {
+        Row: {
+          created_at: string;
+          difficulty: Database['public']['Enums']['quest_difficulty'];
+          points_per_hour: number;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          difficulty: Database['public']['Enums']['quest_difficulty'];
+          points_per_hour: number;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          difficulty?: Database['public']['Enums']['quest_difficulty'];
+          points_per_hour?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       profiles: {
         Row: {
           avatar_path: string | null;
@@ -1047,6 +1094,28 @@ export type Database = {
             referencedColumns: ['id'];
           },
         ];
+      };
+      rating_multipliers: {
+        Row: {
+          created_at: string;
+          multiplier_pct: number;
+          rating: number;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          multiplier_pct: number;
+          rating: number;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          multiplier_pct?: number;
+          rating?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
       };
       skills: {
         Row: {
@@ -1589,6 +1658,34 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      my_benefit: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          achievements: Json;
+          avg_rating: number;
+          hide_from_leaderboard: boolean;
+          level_code: string;
+          level_min_points: number;
+          month_minutes: number;
+          next_level_code: string;
+          next_level_min_points: number;
+          quests_count: number;
+          skills: Json;
+          team_area_m2: number;
+          team_bags: number;
+          timezone: string;
+          total_minutes: number;
+          total_points: number;
+          week_minutes: number;
+        }[];
+      };
+      my_hours: {
+        Args: { p_from?: string; p_to?: string };
+        Returns: {
+          minutes: number;
+          quests: number;
+        }[];
+      };
       my_quest_attendance: {
         Args: { p_quest_id: string };
         Returns: {
@@ -1614,6 +1711,17 @@ export type Database = {
           status: Database['public']['Enums']['quest_status'];
           taken: number;
           title: string;
+        }[];
+      };
+      org_leaderboard: {
+        Args: { p_org_id: string; p_period?: string };
+        Returns: {
+          full_name: string;
+          is_me: boolean;
+          minutes: number;
+          place: number;
+          points: number;
+          user_id: string;
         }[];
       };
       quest_feed: {
@@ -1719,6 +1827,43 @@ export type Database = {
         SetofOptions: {
           from: '*';
           to: 'memberships';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      set_quest_contribution: {
+        Args: { p_area_m2: number; p_bags: number; p_quest_id: string };
+        Returns: {
+          address: string;
+          after_photo_path: string | null;
+          area_m2: number | null;
+          bags_collected: number | null;
+          before_photo_path: string | null;
+          bring_items: string[];
+          cancel_deadline_hours: number;
+          capacity: number;
+          coordinator_contact: string | null;
+          coordinator_id: string | null;
+          created_at: string;
+          created_by: string | null;
+          description: string;
+          difficulty: Database['public']['Enums']['quest_difficulty'];
+          ends_at: string;
+          id: string;
+          lat: number;
+          lng: number;
+          org_id: string;
+          provided_items: string[];
+          radius_m: number;
+          starts_at: string;
+          status: Database['public']['Enums']['quest_status'];
+          task_id: string | null;
+          title: string;
+          updated_at: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'quests';
           isOneToOne: true;
           isSetofReturn: false;
         };

@@ -16,10 +16,12 @@ import {
   type ConfirmDraft,
 } from '@/features/attendance/components/ConfirmRow';
 import { applyDraftPatch } from '@/features/attendance/drafts';
-import { splitMinutes } from '@/features/attendance/minutes';
 import { useConfirmHours, useShiftSummary } from '@/features/attendance/queries';
+import { ContributionForm } from '@/features/benefit/components/ContributionForm';
+import { useQuestContribution } from '@/features/benefit/queries';
 import { toDbError } from '@/lib/db-errors';
 import { useTheme } from '@/theme/ThemeProvider';
+import { useFormatDuration } from '@/lib/use-format-duration';
 
 /** Подтверждение часов: таблица пришедших, правки с причиной, оценки 1–5 и комментарий. */
 export default function ConfirmHoursScreen() {
@@ -27,6 +29,7 @@ export default function ConfirmHoursScreen() {
   const { spacing } = useTheme();
   const { questId } = useLocalSearchParams<{ questId: string }>();
   const summary = useShiftSummary(questId);
+  const contribution = useQuestContribution(questId);
   const confirm = useConfirmHours();
   const [drafts, setDrafts] = useState<Record<string, ConfirmDraft>>({});
   const [showErrors, setShowErrors] = useState(false);
@@ -40,12 +43,7 @@ export default function ConfirmHoursScreen() {
     const row = attended.find((r) => r.user_id === userId);
     return drafts[userId] ?? (row ? initialDraft(row) : null);
   };
-  const duration = (minutes: number) => {
-    const { hours, minutes: m } = splitMinutes(minutes);
-    return hours > 0
-      ? t('attendance.hoursMinutes', { hours, minutes: m })
-      : t('attendance.minutesOnly', { minutes: m });
-  };
+  const duration = useFormatDuration();
 
   const submit = async () => {
     setError(null);
@@ -92,6 +90,14 @@ export default function ConfirmHoursScreen() {
         <AppText variant="heading" tone="primary" accessibilityRole="alert">
           ✓ {t('attendance.confirmedAll')}
         </AppText>
+      ) : null}
+
+      {contribution.data ? (
+        <ContributionForm
+          questId={questId}
+          bags={contribution.data.bags_collected}
+          area={contribution.data.area_m2}
+        />
       ) : null}
 
       {pending.map((row) => {

@@ -81,11 +81,7 @@ export function QuestCard({ quest }: QuestCardProps) {
             icon="location-outline"
             text={distanceText ? `${quest.address} · ${distanceText}` : quest.address}
           />
-          <Row
-            icon="star-outline"
-            text={`${t('quests.reward')}: ${t('quests.rewardValue', reward)}`}
-            color={colors.text}
-          />
+          <Row icon="star-outline" text={t('quests.rewardValue', reward)} color={colors.text} />
         </View>
 
         <PlacesBar taken={quest.taken} capacity={quest.capacity} waitlisted={quest.waitlisted} />

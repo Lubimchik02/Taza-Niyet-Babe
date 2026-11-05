@@ -52,6 +52,10 @@ export default function AppStackLayout() {
         name="quests/[questId]/confirm"
         options={{ title: t('attendance.confirmTitle') }}
       />
+      <Stack.Screen
+        name="organizations/[orgId]/leaderboard"
+        options={{ title: t('benefit.leaderboard') }}
+      />
       <Stack.Screen name="checkin/[token]" options={{ title: t('attendance.shiftTitle') }} />
     </Stack>
   );

@@ -8,9 +8,9 @@ import { Card } from '@/components/ui/Card';
 import { RatingStars } from '@/components/ui/RatingStars';
 import { useTheme } from '@/theme/ThemeProvider';
 
-import { splitMinutes } from '../minutes';
 import { useMyAttendance } from '../queries';
 import { usePendingAttendanceCount } from '../queue';
+import { useFormatDuration } from '@/lib/use-format-duration';
 
 interface MyAttendanceCardProps {
   questId: string;
@@ -27,16 +27,13 @@ export function MyAttendanceCard({ questId, questStatus, signedUp }: MyAttendanc
   const pending = usePendingAttendanceCount();
   const data = mine.data;
 
+  // Хук — до раннего выхода: порядок хуков не должен зависеть от данных.
+  const duration = useFormatDuration();
+
   if (!signedUp || (!shiftOn && !data?.sessions.length)) return null;
 
   const clock = (iso: string) =>
     new Date(iso).toLocaleTimeString(i18n.language, { hour: '2-digit', minute: '2-digit' });
-  const duration = (minutes: number) => {
-    const { hours, minutes: m } = splitMinutes(minutes);
-    return hours > 0
-      ? t('attendance.hoursMinutes', { hours, minutes: m })
-      : t('attendance.minutesOnly', { minutes: m });
-  };
   const active = data?.sessions.some((s) => s.check_out_at === null) ?? false;
   const valueText = (field: string, value: string | null) =>
     value === null ? '—' : field === 'confirmed_minutes' ? duration(Number(value)) : clock(value);
