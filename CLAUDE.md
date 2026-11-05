@@ -10,8 +10,10 @@
    check-in/check-out, расчёта часов и баллов, сначала покрывается тестами.
 2. **Безопасность на сервере.** Права проверяет Postgres (RLS на _каждой_ таблице) и Edge Functions.
    Защита маршрутов в клиенте (`Stack.Protected`) — только UX, а не контроль доступа.
-3. **Секреты не попадают в клиент и в git.** В приложении только `EXPO_PUBLIC_SUPABASE_URL` и
-   publishable key. Service role / secret key — только в Edge Functions. `.env` в `.gitignore`.
+3. **Секреты не попадают в клиент и в git.** В приложении только `EXPO_PUBLIC_*` (URL Supabase,
+   publishable key, адрес веб-версии). Service role / secret key — только в Edge Functions.
+   `.env` в `.gitignore`. Без входа доступна только `verify_certificate` — и только данные,
+   напечатанные на сертификате.
 4. **Неизменяемые журналы.** `audit_log` и `points_ledger` — только append. Правки часов — только через
    `adjustments` с обязательной причиной.
 5. **Время.** Хранится и считается на сервере в UTC, показывается в часовом поясе пользователя.
@@ -32,6 +34,7 @@ src/app/            только маршруты (экраны и _layout); л�
   (auth)/           вход по OTP: sign-in, verify
   (app)/            стек после входа: (tabs)/ — вкладки, organizations/, scan
   join/[code].tsx   приглашение по ссылке/QR — доступно в любом состоянии входа
+  verify/[id].tsx   публичная проверка сертификата — без входа; только данные verify_certificate
   onboarding.tsx
 src/features/<x>/   логика фичи: api.ts, schemas.ts (zod), сторы, components/, __tests__/
 src/components/ui/  общие UI-компоненты (Button, TextField, AppText, Screen…)

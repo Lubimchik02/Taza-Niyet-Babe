@@ -53,6 +53,8 @@ function RootNavigator() {
         </Stack.Protected>
         {/* Приглашение открывается в любом состоянии: без входа код запоминается до входа. */}
         <Stack.Screen name="join/[code]" />
+        {/* Публичная проверка сертификата — без входа (вуз, работодатель). */}
+        <Stack.Screen name="verify/[id]" />
       </Stack>
     </>
   );

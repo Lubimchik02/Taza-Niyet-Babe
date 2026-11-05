@@ -21,3 +21,16 @@ export const publicEnv = readPublicEnv({
   EXPO_PUBLIC_SUPABASE_URL: process.env.EXPO_PUBLIC_SUPABASE_URL,
   EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
 });
+
+const DEFAULT_WEB_URL = 'http://localhost:8081';
+
+/**
+ * Публичный адрес веб-версии: на него ведёт QR сертификата (страница verify/{id}).
+ * Необязателен: без него — адрес dev-сервера. Перед выпуском приложения задать боевой домен.
+ */
+export function readWebUrl(value: string | undefined): string {
+  const parsed = z.url().safeParse(value?.trim());
+  return (parsed.success ? parsed.data : DEFAULT_WEB_URL).replace(/\/+$/, '');
+}
+
+export const publicWebUrl = readWebUrl(process.env.EXPO_PUBLIC_WEB_URL);

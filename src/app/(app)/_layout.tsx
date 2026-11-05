@@ -56,6 +56,8 @@ export default function AppStackLayout() {
         name="organizations/[orgId]/leaderboard"
         options={{ title: t('benefit.leaderboard') }}
       />
+      <Stack.Screen name="certificates/index" options={{ title: t('certificates.title') }} />
+      <Stack.Screen name="certificates/[id]" options={{ title: t('certificates.detailTitle') }} />
       <Stack.Screen name="checkin/[token]" options={{ title: t('attendance.shiftTitle') }} />
     </Stack>
   );

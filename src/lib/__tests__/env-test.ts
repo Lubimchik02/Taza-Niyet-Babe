@@ -1,4 +1,4 @@
-import { readPublicEnv } from '../env';
+import { readPublicEnv, readWebUrl } from '../env';
 
 describe('readPublicEnv', () => {
   it('принимает корректные значения', () => {
@@ -15,5 +15,16 @@ describe('readPublicEnv', () => {
       ok: false,
       missing: ['EXPO_PUBLIC_SUPABASE_URL', 'EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY'],
     });
+  });
+});
+
+describe('readWebUrl', () => {
+  it('берёт заданный адрес без завершающего слеша', () => {
+    expect(readWebUrl('https://taza-niyet.kz/')).toBe('https://taza-niyet.kz');
+  });
+
+  it('без значения или с мусором — адрес dev-сервера', () => {
+    expect(readWebUrl(undefined)).toBe('http://localhost:8081');
+    expect(readWebUrl('not a url')).toBe('http://localhost:8081');
   });
 });

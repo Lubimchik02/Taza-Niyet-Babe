@@ -1558,6 +1558,31 @@ export type Database = {
           valid_until: string;
         }[];
       };
+      issue_certificate: {
+        Args: { p_org_id: string };
+        Returns: {
+          avg_rating: number | null;
+          created_at: string;
+          full_name: string;
+          id: string;
+          issued_at: string;
+          org_id: string;
+          pdf_path: string | null;
+          quests: NonNullable<Json>;
+          quests_count: number;
+          revoked_at: string | null;
+          skills: NonNullable<Json>;
+          total_minutes: number;
+          updated_at: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'certificates';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
       list_join_requests: {
         Args: { p_org_id: string };
         Returns: {
@@ -1765,6 +1790,31 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      revoke_certificate: {
+        Args: { p_id: string };
+        Returns: {
+          avg_rating: number | null;
+          created_at: string;
+          full_name: string;
+          id: string;
+          issued_at: string;
+          org_id: string;
+          pdf_path: string | null;
+          quests: NonNullable<Json>;
+          quests_count: number;
+          revoked_at: string | null;
+          skills: NonNullable<Json>;
+          total_minutes: number;
+          updated_at: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'certificates';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
       revoke_invite: { Args: { p_invite_id: string }; Returns: undefined };
       save_quest: {
         Args: { p_data: Json; p_org_id: string; p_quest_id?: string; p_skill_ids?: string[] };
@@ -1942,6 +1992,21 @@ export type Database = {
           isOneToOne: true;
           isSetofReturn: false;
         };
+      };
+      verify_certificate: {
+        Args: { p_id: string };
+        Returns: {
+          avg_rating: number;
+          full_name: string;
+          id: string;
+          issued_at: string;
+          org_name: string;
+          quests: Json;
+          quests_count: number;
+          revoked_at: string;
+          skills: Json;
+          total_minutes: number;
+        }[];
       };
     };
     Enums: {

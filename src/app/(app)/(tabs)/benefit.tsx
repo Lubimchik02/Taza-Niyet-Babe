@@ -90,6 +90,10 @@ export default function BenefitScreen() {
             </Card>
 
             <LevelCard points={b.total_points} />
+            <Button
+              title={t('benefit.certificates')}
+              onPress={() => router.push('/certificates')}
+            />
 
             <Card>
               <AppText variant="heading">{t('benefit.skills')}</AppText>
