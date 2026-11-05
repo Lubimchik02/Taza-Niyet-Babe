@@ -37,8 +37,27 @@ src/components/ui/  общие UI-компоненты (Button, TextField, AppTe
 src/theme/          палитра, токены, ThemeProvider (светлая/тёмная)
 src/i18n/           locales/ru.ts — эталон; kk и en типизированы по нему
 src/lib/            supabase, env, storage, query-client
-supabase/           миграции, seed, тесты RLS, Edge Functions (с этапа 2)
+supabase/migrations/ схема и RLS (только новые файлы; применённые миграции не редактировать)
+supabase/seed.sql    данные для разработки (фиксированные UUID — на них опираются тесты)
+supabase/tests/database/ pgTAP-тесты схемы и политик доступа
 ```
+
+## База данных
+
+- Каждая новая таблица в `public`: `enable row level security`, политики, `created_at`/`updated_at`
+  с триггером `set_updated_at`, индексы на все внешние ключи. Тест `00_schema` упадёт, если
+  у таблицы нет RLS или политик, или если у `anon` появились привилегии.
+- Проверки ролей в политиках — только через `private.is_org_member / is_org_manager / is_org_admin /
+shares_org_with`; `auth.uid()` в политиках оборачивать в `(select auth.uid())`.
+- Запись в доверенные таблицы (`quest_signups`, `attendance_sessions`, `hour_confirmations`,
+  `adjustments`, `points_ledger`, `audit_log`, `certificates`, `user_skills`, `user_achievements`)
+  клиенту запрещена привилегиями — только через security definer функции / Edge Functions,
+  которые проверяют бизнес-правила.
+- Security definer функции: в схеме `private` (или явно проверяют права), всегда `set search_path = ''`
+  и полностью квалифицированные имена.
+- Изменения в организации пишутся в `audit_log` триггером `audit` — подключай его к новым таблицам
+  с действиями пользователей.
+- После изменения схемы: `npm run db:types`, чтобы обновить `src/lib/database.types.ts`.
 
 ## Команды
 
@@ -48,7 +67,14 @@ npm run check          # typecheck + lint + тесты — запускать п
 npm test               # Jest
 npx expo install <pkg> # ВСЕГДА вместо npm install для зависимостей приложения (совместимые версии)
 npx expo-doctor        # проверка зависимостей и конфигурации
+npm run db:start       # локальный Supabase (нужен запущенный Docker Desktop)
+npm run db:reset       # пересоздать БД: миграции + seed
+npm run db:test        # pgTAP-тесты RLS и схемы
+npm run db:types       # сгенерировать типы БД для клиента
 ```
+
+Письма с кодом входа в локальном Supabase: http://127.0.0.1:54324. Seed-пользователи:
+`admin@taza.test`, `coord1@taza.test`, `coord2@taza.test`, `vol1@taza.test` … `vol10@taza.test`.
 
 На Windows флаг dev-зависимости для `expo install` передаётся как `-- --dev`; проверяй, что пакет
 попал в `devDependencies`.
@@ -76,7 +102,9 @@ npx expo-doctor        # проверка зависимостей и конфи
 - Jest (`jest-expo`) + React Native Testing Library 14: **`render` и `fireEvent` асинхронные — всегда `await`.**
 - Файлы тестов: `__tests__/*-test.ts(x)` рядом с кодом.
 - Нативные модули мокаются в `jest.setup.ts`.
-- RLS и SQL-расчёты — pgTAP/SQL-тесты в `supabase/tests` (с этапа 2).
+- RLS и SQL-расчёты — pgTAP в `supabase/tests/database/*.test.sql`, каждый файл в `begin … rollback`.
+  Вход под пользователем — `pg_temp.login_as(uuid)`; число затронутых строк — `pg_temp.affected(sql)`
+  (RLS не бросает ошибку на UPDATE/DELETE, а просто фильтрует строки).
 
 ## Git
 

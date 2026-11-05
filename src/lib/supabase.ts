@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { AppState } from 'react-native';
 
+import type { Database } from './database.types';
 import { publicEnv } from './env';
 import { kvStorage } from './storage';
 
@@ -17,8 +18,8 @@ if (!publicEnv.ok && __DEV__) {
 const url = publicEnv.ok ? publicEnv.env.EXPO_PUBLIC_SUPABASE_URL : 'http://127.0.0.1:54321';
 const key = publicEnv.ok ? publicEnv.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY : 'not-configured';
 
-// TODO(этап 2): типизировать клиент сгенерированными типами БД (createClient<Database>).
-export const supabase = createClient(url, key, {
+// Типы генерируются из локальной БД: npm run db:types.
+export const supabase = createClient<Database>(url, key, {
   auth: {
     storage: kvStorage,
     autoRefreshToken: true,

@@ -3,28 +3,45 @@
 Приложение, которое делает волонтёрство осязаемым: подтверждённые часы, баллы, уровни, навыки
 и сертификаты. React Native + Expo, бэкенд — Supabase.
 
-> Статус: **этап 1 — каркас** (навигация, тема, i18n, подключение Supabase, вход по OTP).
-> Полная инструкция появится на этапе 10.
+> Статус: **этапы 1–2** — каркас приложения (навигация, тема, kk/ru/en, вход по коду) и база данных
+> (схема, RLS, seed, тесты политик). Полная инструкция появится на этапе 10.
 
-## Запуск
+## Запуск локально
 
-Нужен Node.js 20+.
+Нужны Node.js 20+ и запущенный Docker Desktop.
 
 ```bash
 npm install
-cp .env.example .env   # заполните URL и publishable key проекта Supabase
-npm start              # затем: a — Android, i — iOS, w — браузер
+npm run db:start   # локальный Supabase; первый запуск скачивает образы (~4 ГБ)
 ```
 
-Без `.env` приложение тоже запустится, но вход будет недоступен — экран входа это покажет.
+Создайте `.env` по образцу `.env.example`. URL — `http://127.0.0.1:54321`, publishable key
+выводит команда `npx supabase status`.
 
-Для входа по email в Supabase должен быть включён Email OTP; для входа по телефону — настроен
-SMS-провайдер. Локальный Supabase и миграции появятся на этапе 2.
+```bash
+npm start          # затем: a — Android, i — iOS, w — браузер
+```
+
+### Вход
+
+Тестовые пользователи (из `supabase/seed.sql`):
+
+| Роль        | Email                                  |
+| ----------- | -------------------------------------- |
+| Админ       | `admin@taza.test`                      |
+| Координатор | `coord1@taza.test`, `coord2@taza.test` |
+| Волонтёр    | `vol1@taza.test` … `vol10@taza.test`   |
+
+Код входа приходит в локальный почтовый ящик: http://127.0.0.1:54324.
+Панель управления БД (Studio): http://127.0.0.1:54323.
 
 ## Проверки
 
 ```bash
-npm run check   # TypeScript + ESLint + Jest
+npm run check     # TypeScript + ESLint + Jest
+npm run db:test   # pgTAP: RLS, изоляция организаций, защита учёта часов
+npm run db:reset  # пересоздать БД из миграций и seed
+npm run db:types  # обновить типы БД после изменения схемы
 ```
 
 Правила проекта — в [CLAUDE.md](CLAUDE.md), принятые решения — в [DECISIONS.md](DECISIONS.md).
