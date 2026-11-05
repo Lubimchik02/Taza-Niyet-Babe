@@ -14,6 +14,8 @@ import { POINTS_PER_HOUR, questRewardRange } from '@/features/points/config';
 import { DifficultyBadge } from '@/features/quests/components/DifficultyBadge';
 import { PlacesBar } from '@/features/quests/components/PlacesBar';
 import { SignupPanel } from '@/features/quests/components/SignupPanel';
+import { MyAttendanceCard } from '@/features/attendance/components/MyAttendanceCard';
+import { ShiftActions } from '@/features/attendance/components/ShiftActions';
 import { buildRouteUrl } from '@/features/quests/geo';
 import { useParticipants, useQuest, useQuestPhotoUrl } from '@/features/quests/queries';
 import { durationMinutes, formatQuestTime } from '@/features/quests/time';
@@ -76,7 +78,15 @@ export default function QuestScreen() {
         {q.description ? <AppText>{q.description}</AppText> : null}
       </View>
 
+      {q.can_manage ? (
+        <ShiftActions questId={q.id} status={q.status} startsAt={q.starts_at} />
+      ) : null}
       <SignupPanel quest={q} />
+      <MyAttendanceCard
+        questId={q.id}
+        questStatus={q.status}
+        signedUp={q.my_status === 'signed_up'}
+      />
 
       <Card>
         <Section icon="calendar-outline" title={t('quests.when')}>

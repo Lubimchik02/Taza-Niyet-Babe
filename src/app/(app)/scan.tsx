@@ -1,5 +1,5 @@
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
@@ -8,6 +8,7 @@ import { AppText } from '@/components/ui/AppText';
 import { Button } from '@/components/ui/Button';
 import { QueryState } from '@/components/ui/QueryState';
 import { Screen } from '@/components/ui/Screen';
+import { parseCheckinToken } from '@/features/attendance/qr';
 import { parseInviteCode } from '@/features/organizations/invite-link';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -15,7 +16,10 @@ export default function ScanScreen() {
   const { t } = useTranslation();
   const { colors, radius } = useTheme();
   const [permission, requestPermission] = useCameraPermissions();
-  const [notInvite, setNotInvite] = useState(false);
+  // mode=in|out — сканер открыт с карточки квеста для отметки; без mode — для приглашений.
+  const { mode } = useLocalSearchParams<{ mode?: 'in' | 'out' }>();
+  const forAttendance = mode === 'in' || mode === 'out';
+  const [notRecognized, setNotRecognized] = useState(false);
   // Камера присылает один и тот же код много раз в секунду — реагируем один раз.
   const handled = useRef(false);
 
@@ -51,9 +55,19 @@ export default function ScanScreen() {
         barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
         onBarcodeScanned={({ data }) => {
           if (handled.current) return;
-          const code = parseInviteCode(data);
+          // Один сканер на всё: QR отметки на смене и QR-приглашения.
+          const checkin = parseCheckinToken(data);
+          if (checkin) {
+            handled.current = true;
+            router.replace({
+              pathname: '/checkin/[token]',
+              params: { token: checkin.token, mode: mode === 'out' ? 'out' : 'in' },
+            });
+            return;
+          }
+          const code = forAttendance ? null : parseInviteCode(data);
           if (!code) {
-            setNotInvite(true);
+            setNotRecognized(true);
             return;
           }
           handled.current = true;
@@ -65,7 +79,13 @@ export default function ScanScreen() {
       </View>
       <View style={[styles.hint, { backgroundColor: colors.surface, borderRadius: radius.lg }]}>
         <AppText align="center" accessibilityLiveRegion="polite">
-          {notInvite ? t('organizations.invite.invalidCode') : t('organizations.scan.hint')}
+          {notRecognized
+            ? forAttendance
+              ? t('errors.qr_invalid')
+              : t('organizations.invite.invalidCode')
+            : forAttendance
+              ? t('attendance.scanHint')
+              : t('organizations.scan.hint')}
         </AppText>
       </View>
     </View>

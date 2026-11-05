@@ -130,6 +130,7 @@ export type Database = {
           check_in_lng: number | null;
           check_in_method: Database['public']['Enums']['attendance_method'];
           check_out_at: string | null;
+          check_out_event_id: string | null;
           check_out_lat: number | null;
           check_out_lng: number | null;
           check_out_method: Database['public']['Enums']['attendance_method'] | null;
@@ -151,6 +152,7 @@ export type Database = {
           check_in_lng?: number | null;
           check_in_method: Database['public']['Enums']['attendance_method'];
           check_out_at?: string | null;
+          check_out_event_id?: string | null;
           check_out_lat?: number | null;
           check_out_lng?: number | null;
           check_out_method?: Database['public']['Enums']['attendance_method'] | null;
@@ -171,6 +173,7 @@ export type Database = {
           check_in_lng?: number | null;
           check_in_method?: Database['public']['Enums']['attendance_method'];
           check_out_at?: string | null;
+          check_out_event_id?: string | null;
           check_out_lat?: number | null;
           check_out_lng?: number | null;
           check_out_method?: Database['public']['Enums']['attendance_method'] | null;
@@ -1237,6 +1240,41 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      adjust_session: {
+        Args: {
+          p_check_in_at: string;
+          p_check_out_at: string;
+          p_reason: string;
+          p_session_id: string;
+        };
+        Returns: {
+          check_in_at: string;
+          check_in_lat: number | null;
+          check_in_lng: number | null;
+          check_in_method: Database['public']['Enums']['attendance_method'];
+          check_out_at: string | null;
+          check_out_event_id: string | null;
+          check_out_lat: number | null;
+          check_out_lng: number | null;
+          check_out_method: Database['public']['Enums']['attendance_method'] | null;
+          client_event_id: string | null;
+          created_at: string;
+          id: string;
+          offline: boolean;
+          org_id: string;
+          quest_id: string;
+          recorded_by: string | null;
+          status: Database['public']['Enums']['attendance_status'];
+          updated_at: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'attendance_sessions';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
       cancel_join_request: { Args: { p_request_id: string }; Returns: undefined };
       cancel_signup: {
         Args: { p_quest_id: string };
@@ -1258,6 +1296,79 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      check_in: {
+        Args: {
+          p_client_event_id: string;
+          p_device_time?: string;
+          p_lat: number;
+          p_lng: number;
+          p_token: string;
+        };
+        Returns: {
+          check_in_at: string;
+          check_in_lat: number | null;
+          check_in_lng: number | null;
+          check_in_method: Database['public']['Enums']['attendance_method'];
+          check_out_at: string | null;
+          check_out_event_id: string | null;
+          check_out_lat: number | null;
+          check_out_lng: number | null;
+          check_out_method: Database['public']['Enums']['attendance_method'] | null;
+          client_event_id: string | null;
+          created_at: string;
+          id: string;
+          offline: boolean;
+          org_id: string;
+          quest_id: string;
+          recorded_by: string | null;
+          status: Database['public']['Enums']['attendance_status'];
+          updated_at: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'attendance_sessions';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      check_out: {
+        Args: {
+          p_client_event_id: string;
+          p_device_time?: string;
+          p_lat: number;
+          p_lng: number;
+          p_token: string;
+        };
+        Returns: {
+          check_in_at: string;
+          check_in_lat: number | null;
+          check_in_lng: number | null;
+          check_in_method: Database['public']['Enums']['attendance_method'];
+          check_out_at: string | null;
+          check_out_event_id: string | null;
+          check_out_lat: number | null;
+          check_out_lng: number | null;
+          check_out_method: Database['public']['Enums']['attendance_method'] | null;
+          client_event_id: string | null;
+          created_at: string;
+          id: string;
+          offline: boolean;
+          org_id: string;
+          quest_id: string;
+          recorded_by: string | null;
+          status: Database['public']['Enums']['attendance_status'];
+          updated_at: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'attendance_sessions';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      confirm_hours: { Args: { p_items: Json; p_quest_id: string }; Returns: number };
       create_invite: {
         Args: {
           p_expires_in_hours?: number;
@@ -1325,6 +1436,7 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      finish_shift: { Args: { p_quest_id: string }; Returns: number };
       get_invite_preview: {
         Args: { p_code: string };
         Returns: {
@@ -1369,6 +1481,14 @@ export type Database = {
           waitlisted: number;
         }[];
       };
+      get_shift_qr: {
+        Args: { p_quest_id: string; p_windows?: number };
+        Returns: {
+          token: string;
+          valid_from: string;
+          valid_until: string;
+        }[];
+      };
       list_join_requests: {
         Args: { p_org_id: string };
         Returns: {
@@ -1397,6 +1517,86 @@ export type Database = {
           signed_at: string;
           status: Database['public']['Enums']['signup_status'];
           user_id: string;
+        }[];
+      };
+      manual_check_in: {
+        Args: {
+          p_client_event_id?: string;
+          p_device_time?: string;
+          p_quest_id: string;
+          p_user_id: string;
+        };
+        Returns: {
+          check_in_at: string;
+          check_in_lat: number | null;
+          check_in_lng: number | null;
+          check_in_method: Database['public']['Enums']['attendance_method'];
+          check_out_at: string | null;
+          check_out_event_id: string | null;
+          check_out_lat: number | null;
+          check_out_lng: number | null;
+          check_out_method: Database['public']['Enums']['attendance_method'] | null;
+          client_event_id: string | null;
+          created_at: string;
+          id: string;
+          offline: boolean;
+          org_id: string;
+          quest_id: string;
+          recorded_by: string | null;
+          status: Database['public']['Enums']['attendance_status'];
+          updated_at: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'attendance_sessions';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      manual_check_out: {
+        Args: {
+          p_client_event_id?: string;
+          p_device_time?: string;
+          p_quest_id: string;
+          p_user_id: string;
+        };
+        Returns: {
+          check_in_at: string;
+          check_in_lat: number | null;
+          check_in_lng: number | null;
+          check_in_method: Database['public']['Enums']['attendance_method'];
+          check_out_at: string | null;
+          check_out_event_id: string | null;
+          check_out_lat: number | null;
+          check_out_lng: number | null;
+          check_out_method: Database['public']['Enums']['attendance_method'] | null;
+          client_event_id: string | null;
+          created_at: string;
+          id: string;
+          offline: boolean;
+          org_id: string;
+          quest_id: string;
+          recorded_by: string | null;
+          status: Database['public']['Enums']['attendance_status'];
+          updated_at: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'attendance_sessions';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      my_quest_attendance: {
+        Args: { p_quest_id: string };
+        Returns: {
+          adjustments: Json;
+          confirmation: Json;
+          raw_minutes: number;
+          rounded_minutes: number;
+          sessions: Json;
         }[];
       };
       my_quests: {
@@ -1523,6 +1723,24 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      shift_summary: {
+        Args: { p_quest_id: string };
+        Returns: {
+          confirmation: Json;
+          first_check_in: string;
+          full_name: string;
+          last_check_out: string;
+          methods: string[];
+          needs_confirmation: boolean;
+          offline: boolean;
+          present: boolean;
+          raw_minutes: number;
+          rounded_minutes: number;
+          sessions: Json;
+          signed_up: boolean;
+          user_id: string;
+        }[];
+      };
       signup_for_quest: {
         Args: { p_quest_id: string };
         Returns: {
@@ -1539,6 +1757,43 @@ export type Database = {
         SetofOptions: {
           from: '*';
           to: 'quest_signups';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      start_shift: {
+        Args: { p_quest_id: string };
+        Returns: {
+          address: string;
+          after_photo_path: string | null;
+          area_m2: number | null;
+          bags_collected: number | null;
+          before_photo_path: string | null;
+          bring_items: string[];
+          cancel_deadline_hours: number;
+          capacity: number;
+          coordinator_contact: string | null;
+          coordinator_id: string | null;
+          created_at: string;
+          created_by: string | null;
+          description: string;
+          difficulty: Database['public']['Enums']['quest_difficulty'];
+          ends_at: string;
+          id: string;
+          lat: number;
+          lng: number;
+          org_id: string;
+          provided_items: string[];
+          radius_m: number;
+          starts_at: string;
+          status: Database['public']['Enums']['quest_status'];
+          task_id: string | null;
+          title: string;
+          updated_at: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'quests';
           isOneToOne: true;
           isSetofReturn: false;
         };

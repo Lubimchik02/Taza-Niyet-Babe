@@ -2,6 +2,7 @@ import { router, Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useAttendanceSync } from '@/features/attendance/queue';
 import { usePendingInvite } from '@/features/organizations/pending-invite-store';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -10,6 +11,8 @@ export default function AppStackLayout() {
   const { colors } = useTheme();
   const pendingCode = usePendingInvite((s) => s.code);
   const clearPending = usePendingInvite((s) => s.setCode);
+  // Офлайн-отметки уходят на сервер, как только появляется сеть.
+  useAttendanceSync();
 
   // Приглашение, открытое до входа, продолжаем сразу после входа.
   useEffect(() => {
@@ -44,6 +47,12 @@ export default function AppStackLayout() {
       <Stack.Screen name="quests/new" options={{ title: t('quests.form.titleNew') }} />
       <Stack.Screen name="quests/[questId]/index" options={{ title: '' }} />
       <Stack.Screen name="quests/[questId]/edit" options={{ title: t('quests.form.titleEdit') }} />
+      <Stack.Screen name="quests/[questId]/shift" options={{ title: t('attendance.shiftTitle') }} />
+      <Stack.Screen
+        name="quests/[questId]/confirm"
+        options={{ title: t('attendance.confirmTitle') }}
+      />
+      <Stack.Screen name="checkin/[token]" options={{ title: t('attendance.shiftTitle') }} />
     </Stack>
   );
 }
