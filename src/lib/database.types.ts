@@ -837,6 +837,7 @@ export type Database = {
           org_id: string;
           quest_id: string;
           status: Database['public']['Enums']['signup_status'];
+          status_changed_at: string;
           updated_at: string;
           user_id: string;
         };
@@ -848,6 +849,7 @@ export type Database = {
           org_id: string;
           quest_id: string;
           status?: Database['public']['Enums']['signup_status'];
+          status_changed_at?: string;
           updated_at?: string;
           user_id: string;
         };
@@ -858,6 +860,7 @@ export type Database = {
           org_id?: string;
           quest_id?: string;
           status?: Database['public']['Enums']['signup_status'];
+          status_changed_at?: string;
           updated_at?: string;
           user_id?: string;
         };
@@ -935,6 +938,7 @@ export type Database = {
           bring_items: string[];
           cancel_deadline_hours: number;
           capacity: number;
+          coordinator_contact: string | null;
           coordinator_id: string | null;
           created_at: string;
           created_by: string | null;
@@ -963,6 +967,7 @@ export type Database = {
           bring_items?: string[];
           cancel_deadline_hours?: number;
           capacity: number;
+          coordinator_contact?: string | null;
           coordinator_id?: string | null;
           created_at?: string;
           created_by?: string | null;
@@ -990,6 +995,7 @@ export type Database = {
           bring_items?: string[];
           cancel_deadline_hours?: number;
           capacity?: number;
+          coordinator_contact?: string | null;
           coordinator_id?: string | null;
           created_at?: string;
           created_by?: string | null;
@@ -1232,6 +1238,26 @@ export type Database = {
         };
       };
       cancel_join_request: { Args: { p_request_id: string }; Returns: undefined };
+      cancel_signup: {
+        Args: { p_quest_id: string };
+        Returns: {
+          cancelled_at: string | null;
+          created_at: string;
+          id: string;
+          org_id: string;
+          quest_id: string;
+          status: Database['public']['Enums']['signup_status'];
+          status_changed_at: string;
+          updated_at: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'quest_signups';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
       create_invite: {
         Args: {
           p_expires_in_hours?: number;
@@ -1310,6 +1336,39 @@ export type Database = {
           role: Database['public']['Enums']['org_role'];
         }[];
       };
+      get_quest: {
+        Args: { p_quest_id: string };
+        Returns: {
+          address: string;
+          after_photo_path: string;
+          before_photo_path: string;
+          bring_items: string[];
+          can_manage: boolean;
+          cancel_deadline_hours: number;
+          capacity: number;
+          coordinator_contact: string;
+          coordinator_id: string;
+          coordinator_name: string;
+          description: string;
+          difficulty: Database['public']['Enums']['quest_difficulty'];
+          ends_at: string;
+          id: string;
+          lat: number;
+          lng: number;
+          my_status: Database['public']['Enums']['signup_status'];
+          my_waitlist_position: number;
+          org_id: string;
+          org_name: string;
+          provided_items: string[];
+          radius_m: number;
+          skills: Json;
+          starts_at: string;
+          status: Database['public']['Enums']['quest_status'];
+          taken: number;
+          title: string;
+          waitlisted: number;
+        }[];
+      };
       list_join_requests: {
         Args: { p_org_id: string };
         Returns: {
@@ -1328,6 +1387,54 @@ export type Database = {
           membership_id: string;
           role: Database['public']['Enums']['org_role'];
           user_id: string;
+        }[];
+      };
+      list_quest_participants: {
+        Args: { p_quest_id: string };
+        Returns: {
+          full_name: string;
+          queue_position: number;
+          signed_at: string;
+          status: Database['public']['Enums']['signup_status'];
+          user_id: string;
+        }[];
+      };
+      my_quests: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          address: string;
+          capacity: number;
+          difficulty: Database['public']['Enums']['quest_difficulty'];
+          ends_at: string;
+          id: string;
+          my_status: Database['public']['Enums']['signup_status'];
+          my_waitlist_position: number;
+          org_name: string;
+          starts_at: string;
+          status: Database['public']['Enums']['quest_status'];
+          taken: number;
+          title: string;
+        }[];
+      };
+      quest_feed: {
+        Args: { p_from?: string; p_org_id?: string; p_to?: string };
+        Returns: {
+          address: string;
+          can_manage: boolean;
+          capacity: number;
+          difficulty: Database['public']['Enums']['quest_difficulty'];
+          ends_at: string;
+          id: string;
+          lat: number;
+          lng: number;
+          my_status: Database['public']['Enums']['signup_status'];
+          org_id: string;
+          org_name: string;
+          starts_at: string;
+          status: Database['public']['Enums']['quest_status'];
+          taken: number;
+          title: string;
+          waitlisted: number;
         }[];
       };
       request_to_join: {
@@ -1351,6 +1458,43 @@ export type Database = {
         };
       };
       revoke_invite: { Args: { p_invite_id: string }; Returns: undefined };
+      save_quest: {
+        Args: { p_data: Json; p_org_id: string; p_quest_id?: string; p_skill_ids?: string[] };
+        Returns: {
+          address: string;
+          after_photo_path: string | null;
+          area_m2: number | null;
+          bags_collected: number | null;
+          before_photo_path: string | null;
+          bring_items: string[];
+          cancel_deadline_hours: number;
+          capacity: number;
+          coordinator_contact: string | null;
+          coordinator_id: string | null;
+          created_at: string;
+          created_by: string | null;
+          description: string;
+          difficulty: Database['public']['Enums']['quest_difficulty'];
+          ends_at: string;
+          id: string;
+          lat: number;
+          lng: number;
+          org_id: string;
+          provided_items: string[];
+          radius_m: number;
+          starts_at: string;
+          status: Database['public']['Enums']['quest_status'];
+          task_id: string | null;
+          title: string;
+          updated_at: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'quests';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
       search_organizations: {
         Args: { p_query: string };
         Returns: {
@@ -1375,6 +1519,26 @@ export type Database = {
         SetofOptions: {
           from: '*';
           to: 'memberships';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      signup_for_quest: {
+        Args: { p_quest_id: string };
+        Returns: {
+          cancelled_at: string | null;
+          created_at: string;
+          id: string;
+          org_id: string;
+          quest_id: string;
+          status: Database['public']['Enums']['signup_status'];
+          status_changed_at: string;
+          updated_at: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'quest_signups';
           isOneToOne: true;
           isSetofReturn: false;
         };

@@ -18,6 +18,15 @@ export const DB_ERROR_CODES = [
   'request_exists',
   'request_closed',
   'last_admin',
+  'quest_not_found',
+  'quest_closed',
+  'not_signed_up',
+  'cancel_too_late',
+  'invalid_status',
+  'quest_locked',
+  'capacity_below_taken',
+  'location_denied',
+  'photo_upload_failed',
 ] as const;
 
 export type DbErrorCode = (typeof DB_ERROR_CODES)[number] | 'network' | 'generic';
@@ -53,10 +62,16 @@ export function toDbError(error: unknown): DbError {
 }
 
 /** Ответ supabase-js: либо данные без ошибки, либо ошибка без данных. */
-type SupabaseResult<T> = { data: T; error: null } | { data: null; error: object };
+type SupabaseResult = { data: unknown; error: unknown };
 
-/** Бросает DbError, если запрос к Supabase вернул ошибку; иначе возвращает данные. */
-export function unwrap<T>(result: SupabaseResult<T>): T {
-  if (result.error !== null) throw toDbError(result.error);
-  return result.data;
+/** Тип данных успешного ответа (ветвь с error: null). */
+type SuccessData<R extends SupabaseResult> = Extract<R, { error: null }>['data'];
+
+/**
+ * Бросает DbError, если запрос к Supabase вернул ошибку; иначе возвращает данные.
+ * Тип берётся только из успешной ветви ответа, поэтому не зависит от контекста вызова.
+ */
+export function unwrap<R extends SupabaseResult>(result: R): SuccessData<R> {
+  if (result.error !== null && result.error !== undefined) throw toDbError(result.error);
+  return result.data as SuccessData<R>;
 }

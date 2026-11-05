@@ -41,6 +41,9 @@ export default function AppStackLayout() {
         options={{ title: t('organizations.invite.title') }}
       />
       <Stack.Screen name="scan" options={{ title: t('organizations.scan.title') }} />
+      <Stack.Screen name="quests/new" options={{ title: t('quests.form.titleNew') }} />
+      <Stack.Screen name="quests/[questId]/index" options={{ title: '' }} />
+      <Stack.Screen name="quests/[questId]/edit" options={{ title: t('quests.form.titleEdit') }} />
     </Stack>
   );
 }

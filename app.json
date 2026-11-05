@@ -37,7 +37,24 @@
           "microphonePermission": false,
           "recordAudioAndroid": false
         }
-      ]
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Taza Niyet показывает расстояние до квестов и проверяет, что ты на месте задания при отметке.",
+          "isIosBackgroundLocationEnabled": false,
+          "isAndroidBackgroundLocationEnabled": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Taza Niyet прикрепляет к квесту фото места «до» и «после» уборки.",
+          "cameraPermission": "Taza Niyet снимает фото места «до» и «после» уборки.",
+          "microphonePermission": false
+        }
+      ],
+      "expo-image"
     ],
     "experiments": {
       "typedRoutes": true
