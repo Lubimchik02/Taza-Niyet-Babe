@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "Taza Niyet",
+    "slug": "taza-niyet",
+    "scheme": "tazaniyet",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "kz.tazaniyet.app"
+    },
+    "android": {
+      "package": "kz.tazaniyet.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#E8F5EC",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": ["expo-router", "expo-status-bar", "expo-sqlite", "expo-localization", "expo-font"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

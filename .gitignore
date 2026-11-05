@@ -32,3 +32,13 @@ Thumbs.db
 .vscode/
 .idea/
 *.log
+
+# Expo / Metro (из шаблона)
+expo-env.d.ts
+.kotlin/
+*.orig.*
+*.key
+*.pem
+.metro-health-check*
+npm-debug.*
+coverage/
