@@ -32,7 +32,8 @@ expo-sqlite (хранилище сессии, позже офлайн-очере
 ```
 src/app/            только маршруты (экраны и _layout); логику сюда не класть
   (auth)/           вход по OTP: sign-in, verify
-  (app)/            стек после входа: (tabs)/ — вкладки, organizations/, scan
+  (app)/            стек после входа: (tabs)/ — вкладки, organizations/ (+ [orgId]/admin/), quests/,
+                    certificates/, scan, checkin/
   join/[code].tsx   приглашение по ссылке/QR — доступно в любом состоянии входа
   verify/[id].tsx   публичная проверка сертификата — без входа; только данные verify_certificate
   onboarding.tsx
@@ -75,6 +76,9 @@ shares_org_with`; `auth.uid()` в политиках оборачивать в `
   (`session-store`), поэтому ключи не обязаны содержать userId.
 - Новые маршруты дают ошибки типов `Href`, пока не запущен dev-сервер (`npm start` перегенерирует
   `.expo/types`).
+- Вложенные компоненты внутри рендера не объявлять (`function Form()` в теле компонента):
+  поле ввода пересоздаётся на каждый символ и теряет фокус. Только JSX-значение или отдельный компонент.
+- Экспорт: PDF — `lib/pdf-export`, файлы (CSV) — `lib/share-file` (у обоих есть `.web.ts`).
 - Нативные библиотеки без веб-версии (`react-native-maps`) — через пару файлов
   `X.native.tsx` (телефон) и `X.tsx` (веб-запасной вариант) с общими типами в `X.types.ts`.
 - В формах react-hook-form — `useWatch`, а не `watch()` (несовместим с React Compiler);

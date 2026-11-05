@@ -94,6 +94,24 @@ export default function OrganizationScreen() {
         </AppText>
       ) : null}
 
+      {isAdmin ? (
+        <Button
+          title={t('admin.open')}
+          onPress={() =>
+            router.push({ pathname: '/organizations/[orgId]/admin', params: { orgId } })
+          }
+        />
+      ) : null}
+      {isManager ? (
+        <Button
+          variant="secondary"
+          title={t('admin.tasks')}
+          onPress={() =>
+            router.push({ pathname: '/organizations/[orgId]/tasks', params: { orgId } })
+          }
+        />
+      ) : null}
+
       {isManager ? (
         <Card>
           <AppText variant="heading">{t('organizations.requests')}</AppText>

@@ -6,6 +6,7 @@ import { AppText } from '@/components/ui/AppText';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { RatingStars } from '@/components/ui/RatingStars';
+import { DisputeSection } from '@/features/admin/components/DisputeSection';
 import { useTheme } from '@/theme/ThemeProvider';
 
 import { useMyAttendance } from '../queries';
@@ -100,6 +101,7 @@ export function MyAttendanceCard({ questId, questStatus, signedUp }: MyAttendanc
               {t('attendance.comment')}: «{data.confirmation.comment}»
             </AppText>
           ) : null}
+          <DisputeSection confirmationId={data.confirmation.id} />
         </View>
       ) : data?.sessions.length && !shiftOn ? (
         <AppText tone="muted">{t('attendance.awaitingConfirmation')}</AppText>

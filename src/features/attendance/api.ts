@@ -17,6 +17,7 @@ export interface SessionInfo {
 }
 
 export interface ConfirmationInfo {
+  id: string;
   confirmed_minutes: number;
   rating_quality: number;
   rating_activity: number;

@@ -77,8 +77,7 @@ select is(
 
 -- Споры: только по своему подтверждению.
 select lives_ok(
-  $$ insert into public.disputes (confirmation_id, comment)
-     select id, 'Прошу пересмотреть оценку.' from public.hour_confirmations
+  $$ select public.open_dispute(id, 'Прошу пересмотреть оценку.') from public.hour_confirmations
      where quest_id = '9e000000-0000-4000-8000-000000000001' $$,
   'Волонтёр открывает спор по своему подтверждению');
 
@@ -96,9 +95,8 @@ select is((select count(*)::int from public.adjustments), 1, 'Волонтёр �
 
 -- Чужой спор открыть нельзя, даже зная id: user_id берётся из подтверждения и не совпадёт.
 select throws_ok(
-  $$ insert into public.disputes (confirmation_id, comment)
-     values (current_setting('test.vol1_confirmation')::uuid, 'Хочу оспорить чужие часы') $$,
-  '42501', null, 'Нельзя открыть спор по чужому подтверждению');
+  $$ select public.open_dispute(current_setting('test.vol1_confirmation')::uuid, 'Хочу оспорить чужие часы') $$,
+  'P0001', 'not_allowed', 'Нельзя открыть спор по чужому подтверждению');
 
 select pg_temp.login_as('f0000000-0000-4000-8000-000000000006');
 select is((select count(*)::int from public.disputes), 1, 'Волонтёр видит свой спор');

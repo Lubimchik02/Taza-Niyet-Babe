@@ -33,12 +33,18 @@ interface QuestFormProps {
   orgId: string;
   /** null — новый квест. */
   quest: QuestDetails | null;
+  /** Начальные значения нового квеста (например, из задачи «сверху»). */
+  prefill?: Partial<QuestFormValues>;
   onSaved: (questId: string) => void;
 }
 
-function initialValues(quest: QuestDetails | null, timeZone: string): QuestFormValues {
+function initialValues(
+  quest: QuestDetails | null,
+  timeZone: string,
+  prefill?: Partial<QuestFormValues>,
+): QuestFormValues {
   if (!quest) {
-    return {
+    const empty: QuestFormValues = {
       title: '',
       description: '',
       difficulty: 'easy',
@@ -56,6 +62,7 @@ function initialValues(quest: QuestDetails | null, timeZone: string): QuestFormV
       providedItems: '',
       skillIds: [],
     };
+    return { ...empty, ...prefill };
   }
   const start = utcToWallTime(new Date(quest.starts_at), timeZone);
   const hours =
@@ -90,6 +97,7 @@ export function QuestForm(props: QuestFormProps) {
 function QuestFormInner({
   orgId,
   quest,
+  prefill,
   onSaved,
   timeZone,
 }: QuestFormProps & { timeZone: string }) {
@@ -112,7 +120,7 @@ function QuestFormInner({
     formState: { errors, isSubmitting },
   } = useForm<QuestFormValues>({
     resolver: zodResolver(questFormSchema),
-    defaultValues: initialValues(quest, timeZone),
+    defaultValues: initialValues(quest, timeZone, prefill),
   });
   const selectedSkills = useWatch({ control, name: 'skillIds' });
 

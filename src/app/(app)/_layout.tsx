@@ -58,6 +58,27 @@ export default function AppStackLayout() {
       />
       <Stack.Screen name="certificates/index" options={{ title: t('certificates.title') }} />
       <Stack.Screen name="certificates/[id]" options={{ title: t('certificates.detailTitle') }} />
+      <Stack.Screen
+        name="organizations/[orgId]/admin/index"
+        options={{ title: t('admin.panel') }}
+      />
+      <Stack.Screen
+        name="organizations/[orgId]/admin/disputes"
+        options={{ title: t('admin.disputes') }}
+      />
+      <Stack.Screen
+        name="organizations/[orgId]/admin/audit"
+        options={{ title: t('admin.audit') }}
+      />
+      <Stack.Screen
+        name="organizations/[orgId]/admin/reports"
+        options={{ title: t('admin.reports') }}
+      />
+      <Stack.Screen
+        name="organizations/[orgId]/admin/certificates"
+        options={{ title: t('admin.certificates') }}
+      />
+      <Stack.Screen name="organizations/[orgId]/tasks" options={{ title: t('admin.tasks') }} />
       <Stack.Screen name="checkin/[token]" options={{ title: t('attendance.shiftTitle') }} />
     </Stack>
   );

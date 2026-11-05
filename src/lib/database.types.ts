@@ -1558,6 +1558,23 @@ export type Database = {
           valid_until: string;
         }[];
       };
+      hours_report: {
+        Args: { p_from: string; p_org_id: string; p_to: string };
+        Returns: {
+          confirmed_at: string;
+          confirmed_by_name: string;
+          difficulty: Database['public']['Enums']['quest_difficulty'];
+          minutes: number;
+          points: number;
+          quest_date: string;
+          quest_title: string;
+          rating_activity: number;
+          rating_quality: number;
+          rating_teamwork: number;
+          volunteer_id: string;
+          volunteer_name: string;
+        }[];
+      };
       issue_certificate: {
         Args: { p_org_id: string };
         Returns: {
@@ -1583,6 +1600,38 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      list_audit_log: {
+        Args: { p_before?: number; p_limit?: number; p_org_id: string };
+        Returns: {
+          action: string;
+          actor_name: string;
+          created_at: string;
+          entity: string;
+          entity_id: string;
+          id: number;
+          new_value: Json;
+          old_value: Json;
+        }[];
+      };
+      list_disputes: {
+        Args: { p_org_id: string; p_status?: Database['public']['Enums']['dispute_status'] };
+        Returns: {
+          comment: string;
+          confirmed_by_name: string;
+          confirmed_minutes: number;
+          created_at: string;
+          full_name: string;
+          id: string;
+          quest_id: string;
+          quest_starts_at: string;
+          quest_title: string;
+          resolution: string;
+          resolved_at: string;
+          resolved_by_name: string;
+          status: Database['public']['Enums']['dispute_status'];
+          user_id: string;
+        }[];
+      };
       list_join_requests: {
         Args: { p_org_id: string };
         Returns: {
@@ -1591,6 +1640,16 @@ export type Database = {
           id: string;
           message: string;
           user_id: string;
+        }[];
+      };
+      list_org_certificates: {
+        Args: { p_org_id: string };
+        Returns: {
+          full_name: string;
+          id: string;
+          issued_at: string;
+          revoked_at: string;
+          total_minutes: number;
         }[];
       };
       list_org_members: {
@@ -1738,6 +1797,28 @@ export type Database = {
           title: string;
         }[];
       };
+      open_dispute: {
+        Args: { p_comment: string; p_confirmation_id: string };
+        Returns: {
+          comment: string;
+          confirmation_id: string;
+          created_at: string;
+          id: string;
+          org_id: string;
+          resolution: string | null;
+          resolved_at: string | null;
+          resolved_by: string | null;
+          status: Database['public']['Enums']['dispute_status'];
+          updated_at: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'disputes';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
       org_leaderboard: {
         Args: { p_org_id: string; p_period?: string };
         Returns: {
@@ -1786,6 +1867,33 @@ export type Database = {
         SetofOptions: {
           from: '*';
           to: 'join_requests';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      resolve_dispute: {
+        Args: {
+          p_dispute_id: string;
+          p_minutes?: number;
+          p_resolution: string;
+          p_status: Database['public']['Enums']['dispute_status'];
+        };
+        Returns: {
+          comment: string;
+          confirmation_id: string;
+          created_at: string;
+          id: string;
+          org_id: string;
+          resolution: string | null;
+          resolved_at: string | null;
+          resolved_by: string | null;
+          status: Database['public']['Enums']['dispute_status'];
+          updated_at: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'disputes';
           isOneToOne: true;
           isSetofReturn: false;
         };

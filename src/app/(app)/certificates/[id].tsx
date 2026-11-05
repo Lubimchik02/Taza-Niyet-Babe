@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { QueryState } from '@/components/ui/QueryState';
 import { Screen } from '@/components/ui/Screen';
 import { CertificateView } from '@/features/certificates/components/CertificateView';
-import { exportCertificatePdf } from '@/features/certificates/pdf';
+import { exportPdf } from '@/lib/pdf-export';
 import { useCertificate, useCertificateLabels } from '@/features/certificates/queries';
 import { buildCertificateHtml } from '@/features/certificates/template';
 import { qrSvg, verifyUrl } from '@/features/certificates/verify-url';
@@ -23,7 +23,7 @@ export default function CertificateScreen() {
   const data = certificate.data;
   const url = verifyUrl(id);
 
-  const exportPdf = async () => {
+  const handleExportPdf = async () => {
     if (!data) return;
     setError(null);
     setExporting(true);
@@ -36,7 +36,7 @@ export default function CertificateScreen() {
         locale,
         lang,
       });
-      await exportCertificatePdf(html, `${labels.title} — ${data.full_name}`);
+      await exportPdf(html, `${labels.title} — ${data.full_name}`);
     } catch {
       setError(t('errors.generic'));
     } finally {
@@ -62,7 +62,7 @@ export default function CertificateScreen() {
       <Button
         title={t('certificates.sharePdf')}
         loading={exporting}
-        onPress={() => void exportPdf()}
+        onPress={() => void handleExportPdf()}
       />
       <Button
         variant="secondary"

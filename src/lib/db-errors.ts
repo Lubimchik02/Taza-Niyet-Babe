@@ -51,6 +51,8 @@ export const DB_ERROR_CODES = [
   'invalid_contribution',
   'name_required',
   'no_confirmed_hours',
+  'dispute_exists',
+  'dispute_closed',
 ] as const;
 
 export type DbErrorCode = (typeof DB_ERROR_CODES)[number] | 'network' | 'generic';
