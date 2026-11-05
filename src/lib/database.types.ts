@@ -478,6 +478,65 @@ export type Database = {
           },
         ];
       };
+      join_requests: {
+        Row: {
+          created_at: string;
+          decided_at: string | null;
+          decided_by: string | null;
+          id: string;
+          message: string;
+          org_id: string;
+          status: Database['public']['Enums']['join_request_status'];
+          updated_at: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          decided_at?: string | null;
+          decided_by?: string | null;
+          id?: string;
+          message?: string;
+          org_id: string;
+          status?: Database['public']['Enums']['join_request_status'];
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          decided_at?: string | null;
+          decided_by?: string | null;
+          id?: string;
+          message?: string;
+          org_id?: string;
+          status?: Database['public']['Enums']['join_request_status'];
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'join_requests_decided_by_fkey';
+            columns: ['decided_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'join_requests_org_id_fkey';
+            columns: ['org_id'];
+            isOneToOne: false;
+            referencedRelation: 'organizations';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'join_requests_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       memberships: {
         Row: {
           created_at: string;
@@ -566,6 +625,64 @@ export type Database = {
             columns: ['user_id'];
             isOneToOne: false;
             referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      org_invites: {
+        Row: {
+          code: string;
+          created_at: string;
+          created_by: string | null;
+          expires_at: string | null;
+          id: string;
+          max_uses: number | null;
+          org_id: string;
+          revoked_at: string | null;
+          role: Database['public']['Enums']['org_role'];
+          updated_at: string;
+          uses: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          code?: string;
+          created_at?: string;
+          created_by?: string | null;
+          expires_at?: string | null;
+          id?: string;
+          max_uses?: number | null;
+          org_id: string;
+          revoked_at?: string | null;
+          role?: Database['public']['Enums']['org_role'];
+          updated_at?: string;
+          uses?: number;
+        };
+        Update: {
+          code?: string;
+          created_at?: string;
+          created_by?: string | null;
+          expires_at?: string | null;
+          id?: string;
+          max_uses?: number | null;
+          org_id?: string;
+          revoked_at?: string | null;
+          role?: Database['public']['Enums']['org_role'];
+          updated_at?: string;
+          uses?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'org_invites_created_by_fkey';
+            columns: ['created_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'org_invites_org_id_fkey';
+            columns: ['org_id'];
+            isOneToOne: false;
+            referencedRelation: 'organizations';
             referencedColumns: ['id'];
           },
         ];
@@ -1097,12 +1214,177 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      accept_invite: {
+        Args: { p_code: string };
+        Returns: {
+          created_at: string;
+          id: string;
+          org_id: string;
+          role: Database['public']['Enums']['org_role'];
+          updated_at: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'memberships';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      cancel_join_request: { Args: { p_request_id: string }; Returns: undefined };
+      create_invite: {
+        Args: {
+          p_expires_in_hours?: number;
+          p_max_uses?: number;
+          p_org_id: string;
+          p_role?: Database['public']['Enums']['org_role'];
+        };
+        Returns: {
+          code: string;
+          created_at: string;
+          created_by: string | null;
+          expires_at: string | null;
+          id: string;
+          max_uses: number | null;
+          org_id: string;
+          revoked_at: string | null;
+          role: Database['public']['Enums']['org_role'];
+          updated_at: string;
+          uses: number;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'org_invites';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      create_organization: {
+        Args: { p_description?: string; p_name: string; p_slug: string };
+        Returns: {
+          created_at: string;
+          created_by: string | null;
+          description: string;
+          id: string;
+          logo_path: string | null;
+          name: string;
+          slug: string;
+          timezone: string;
+          updated_at: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'organizations';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      decide_join_request: {
+        Args: { p_approve: boolean; p_request_id: string };
+        Returns: {
+          created_at: string;
+          decided_at: string | null;
+          decided_by: string | null;
+          id: string;
+          message: string;
+          org_id: string;
+          status: Database['public']['Enums']['join_request_status'];
+          updated_at: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'join_requests';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      get_invite_preview: {
+        Args: { p_code: string };
+        Returns: {
+          is_member: boolean;
+          org_description: string;
+          org_id: string;
+          org_name: string;
+          problem: string;
+          role: Database['public']['Enums']['org_role'];
+        }[];
+      };
+      list_join_requests: {
+        Args: { p_org_id: string };
+        Returns: {
+          created_at: string;
+          full_name: string;
+          id: string;
+          message: string;
+          user_id: string;
+        }[];
+      };
+      list_org_members: {
+        Args: { p_org_id: string };
+        Returns: {
+          full_name: string;
+          joined_at: string;
+          membership_id: string;
+          role: Database['public']['Enums']['org_role'];
+          user_id: string;
+        }[];
+      };
+      request_to_join: {
+        Args: { p_message?: string; p_org_id: string };
+        Returns: {
+          created_at: string;
+          decided_at: string | null;
+          decided_by: string | null;
+          id: string;
+          message: string;
+          org_id: string;
+          status: Database['public']['Enums']['join_request_status'];
+          updated_at: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'join_requests';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      revoke_invite: { Args: { p_invite_id: string }; Returns: undefined };
+      search_organizations: {
+        Args: { p_query: string };
+        Returns: {
+          description: string;
+          id: string;
+          is_member: boolean;
+          members_count: number;
+          name: string;
+          slug: string;
+        }[];
+      };
+      set_member_role: {
+        Args: { p_membership_id: string; p_role: Database['public']['Enums']['org_role'] };
+        Returns: {
+          created_at: string;
+          id: string;
+          org_id: string;
+          role: Database['public']['Enums']['org_role'];
+          updated_at: string;
+          user_id: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'memberships';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
     };
     Enums: {
       attendance_method: 'qr' | 'manual' | 'auto';
       attendance_status: 'active' | 'closed' | 'needs_confirmation' | 'confirmed';
       dispute_status: 'open' | 'resolved' | 'rejected';
+      join_request_status: 'pending' | 'approved' | 'rejected' | 'cancelled';
       org_role: 'admin' | 'coordinator' | 'volunteer';
       quest_difficulty: 'easy' | 'medium' | 'hard' | 'extreme';
       quest_status: 'draft' | 'published' | 'in_progress' | 'completed' | 'cancelled';
@@ -1225,6 +1507,7 @@ export const Constants = {
       attendance_method: ['qr', 'manual', 'auto'],
       attendance_status: ['active', 'closed', 'needs_confirmation', 'confirmed'],
       dispute_status: ['open', 'resolved', 'rejected'],
+      join_request_status: ['pending', 'approved', 'rejected', 'cancelled'],
       org_role: ['admin', 'coordinator', 'volunteer'],
       quest_difficulty: ['easy', 'medium', 'hard', 'extreme'],
       quest_status: ['draft', 'published', 'in_progress', 'completed', 'cancelled'],

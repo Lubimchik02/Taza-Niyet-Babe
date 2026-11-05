@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
@@ -8,6 +9,8 @@ import { ChoiceGroup } from '@/components/ui/ChoiceGroup';
 import { Screen } from '@/components/ui/Screen';
 import { mapAuthError, signOut } from '@/features/auth/api';
 import { useSession } from '@/features/auth/session-store';
+import { NameForm } from '@/features/profile/components/NameForm';
+import { useMyProfile } from '@/features/profile/queries';
 import { useSettings, type ThemePreference } from '@/features/settings/settings-store';
 import { LANGUAGE_NAMES, SUPPORTED_LANGUAGES, type Language } from '@/i18n/languages';
 
@@ -16,6 +19,7 @@ type LanguageChoice = Language | 'system';
 export default function ProfileScreen() {
   const { t } = useTranslation();
   const user = useSession((s) => s.session?.user);
+  const profile = useMyProfile();
   const { language, theme, setLanguage, setTheme } = useSettings();
   const [signingOut, setSigningOut] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,6 +52,14 @@ export default function ProfileScreen() {
         <AppText tone="muted">{t('profile.signedInAs')}</AppText>
         <AppText variant="bodyStrong">{user?.email ?? user?.phone ?? '—'}</AppText>
       </View>
+
+      {profile.data ? <NameForm initialName={profile.data.full_name} /> : null}
+
+      <Button
+        variant="secondary"
+        title={t('profile.organizations')}
+        onPress={() => router.push('/organizations')}
+      />
 
       <ChoiceGroup<LanguageChoice>
         label={t('profile.language')}

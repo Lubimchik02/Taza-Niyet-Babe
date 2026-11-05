@@ -30,7 +30,8 @@ expo-sqlite (хранилище сессии, позже офлайн-очере
 ```
 src/app/            только маршруты (экраны и _layout); логику сюда не класть
   (auth)/           вход по OTP: sign-in, verify
-  (app)/            вкладки после входа
+  (app)/            стек после входа: (tabs)/ — вкладки, organizations/, scan
+  join/[code].tsx   приглашение по ссылке/QR — доступно в любом состоянии входа
   onboarding.tsx
 src/features/<x>/   логика фичи: api.ts, schemas.ts (zod), сторы, components/, __tests__/
 src/components/ui/  общие UI-компоненты (Button, TextField, AppText, Screen…)
@@ -57,7 +58,20 @@ shares_org_with`; `auth.uid()` в политиках оборачивать в `
   и полностью квалифицированные имена.
 - Изменения в организации пишутся в `audit_log` триггером `audit` — подключай его к новым таблицам
   с действиями пользователей.
+- Действия с бизнес-правилами — функции `public.*` (security definer), которые сами проверяют
+  права и бросают `raise exception 'код' using errcode = 'P0001'`. Новый код ошибки добавлять в
+  `DB_ERROR_CODES` (`src/lib/db-errors.ts`) и в `errors.*` всех локалей.
+- `execute` на новые функции: `revoke … from public, anon` и `grant … to authenticated`.
 - После изменения схемы: `npm run db:types`, чтобы обновить `src/lib/database.types.ts`.
+
+## Клиентские данные
+
+- Запросы к Supabase — в `features/*/api.ts` через `unwrap()` (бросает `DbError` с кодом),
+  хуки TanStack Query — в `features/*/queries.ts`, ключи — фабрикой (`orgKeys`).
+- После мутации инвалидировать затронутые ключи. При смене пользователя кэш очищается целиком
+  (`session-store`), поэтому ключи не обязаны содержать userId.
+- Новые маршруты дают ошибки типов `Href`, пока не запущен dev-сервер (`npm start` перегенерирует
+  `.expo/types`).
 
 ## Команды
 
@@ -74,7 +88,9 @@ npm run db:types       # сгенерировать типы БД для кли�
 ```
 
 Письма с кодом входа в локальном Supabase: http://127.0.0.1:54324. Seed-пользователи:
-`admin@taza.test`, `coord1@taza.test`, `coord2@taza.test`, `vol1@taza.test` … `vol10@taza.test`.
+`admin@taza.test`, `coord1@taza.test`, `coord2@taza.test`, `vol1@taza.test` … `vol10@taza.test`,
+`newbie@taza.test` (не в организации, с заявкой). Постоянное приглашение для разработки:
+`/join/tazaqala-join-01`.
 
 На Windows флаг dev-зависимости для `expo install` передаётся как `-- --dev`; проверяй, что пакет
 попал в `devDependencies`.
@@ -93,8 +109,11 @@ npm run db:types       # сгенерировать типы БД для кли�
 ## UI и доступность
 
 - Координатор работает на улице в перчатках: основные кнопки ≥ 56 dp, остальные цели ≥ 48 dp.
-- У интерактивных элементов есть `accessibilityRole` и понятный `accessibilityLabel`;
-  ошибки форм объявляются (`accessibilityRole="alert"` / `accessibilityLiveRegion`).
+- У интерактивных элементов есть `role` и понятный `aria-label`; состояние — через `aria-checked`,
+  `aria-disabled`, `aria-busy` (не `accessibilityState`: в вебе он не доходит до экранного чтеца).
+  Ошибки форм объявляются (`accessibilityRole="alert"` / `accessibilityLiveRegion`).
+- Опасные действия (исключить, покинуть, отозвать) — `ConfirmButton` с подтверждением вторым
+  нажатием, без системных диалогов.
 - Поддерживать светлую и тёмную тему и системное увеличение шрифта.
 
 ## Тесты

@@ -51,6 +51,8 @@ function RootNavigator() {
         <Stack.Protected guard={!signedIn && onboardingDone} redirectTo={home}>
           <Stack.Screen name="(auth)" />
         </Stack.Protected>
+        {/* Приглашение открывается в любом состоянии: без входа код запоминается до входа. */}
+        <Stack.Screen name="join/[code]" />
       </Stack>
     </>
   );

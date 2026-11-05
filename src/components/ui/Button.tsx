@@ -35,10 +35,11 @@ export function Button({
 
   return (
     <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={title}
+      role="button"
+      aria-label={title}
       accessibilityHint={hint}
-      accessibilityState={{ disabled: isDisabled, busy: loading }}
+      aria-disabled={isDisabled}
+      aria-busy={loading}
       disabled={isDisabled}
       hitSlop={8}
       style={({ pressed }) => [

@@ -286,3 +286,31 @@ insert into public.notifications (user_id, org_id, type, payload)
 select m.user_id, m.org_id, 'new_quest', jsonb_build_object('quest_id', '9e000000-0000-4000-8000-000000000007')
 from public.memberships m
 where m.role = 'volunteer';
+
+-- Этап 3: приглашения и заявки ---------------------------------------------------------------
+-- Постоянное приглашение волонтёров для разработки: tazaniyet://join/tazaqala-join-01
+insert into public.org_invites (org_id, code, role, created_by, expires_at)
+values ('0e000000-0000-4000-8000-000000000001', 'tazaqala-join-01', 'volunteer',
+        'a0000000-0000-4000-8000-000000000001', null);
+
+-- Новичок без организации подал заявку на вступление.
+with u as (
+  insert into auth.users (
+    instance_id, id, aud, role, email, encrypted_password, email_confirmed_at,
+    raw_app_meta_data, raw_user_meta_data, created_at, updated_at,
+    confirmation_token, recovery_token, email_change_token_new, email_change,
+    email_change_token_current, phone_change, phone_change_token, reauthentication_token
+  ) values (
+    '00000000-0000-0000-0000-000000000000', 'f0000000-0000-4000-8000-000000000099', 'authenticated',
+    'authenticated', 'newbie@taza.test', '', now(), '{"provider":"email","providers":["email"]}',
+    '{"full_name":"Асель Новикова"}', now(), now(), '', '', '', '', '', '', '', ''
+  ) returning id, email
+)
+insert into auth.identities (id, user_id, provider_id, provider, identity_data, last_sign_in_at, created_at, updated_at)
+select gen_random_uuid(), id, id::text, 'email',
+       jsonb_build_object('sub', id::text, 'email', email, 'email_verified', true), now(), now(), now()
+from u;
+
+insert into public.join_requests (org_id, user_id, message)
+values ('0e000000-0000-4000-8000-000000000001', 'f0000000-0000-4000-8000-000000000099',
+        'Хочу помогать с уборками по выходным.');

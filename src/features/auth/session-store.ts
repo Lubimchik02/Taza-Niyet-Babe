@@ -1,6 +1,7 @@
 import type { Session } from '@supabase/supabase-js';
 import { create } from 'zustand';
 
+import { queryClient } from '@/lib/query-client';
 import { supabase } from '@/lib/supabase';
 
 interface SessionState {
@@ -27,6 +28,10 @@ export function startSessionListener(): () => void {
     .catch(() => useSession.setState({ session: null, initialized: true }));
 
   const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+    const previousUserId = useSession.getState().session?.user.id;
+    // Сменился пользователь (выход или вход другим аккаунтом) — кэш прошлого не должен
+    // показаться новому даже на мгновение.
+    if (previousUserId !== session?.user.id) queryClient.clear();
     useSession.setState({ session, initialized: true });
   });
 

@@ -1,65 +1,46 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { Tabs } from 'expo-router';
-import type { ComponentProps } from 'react';
+import { router, Stack } from 'expo-router';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { usePendingInvite } from '@/features/organizations/pending-invite-store';
 import { useTheme } from '@/theme/ThemeProvider';
 
-type IconName = ComponentProps<typeof Ionicons>['name'];
-
-type TabIconProps = Parameters<
-  NonNullable<
-    NonNullable<ComponentProps<typeof Tabs.Screen>['options']> extends infer O
-      ? O extends { tabBarIcon?: infer I }
-        ? I
-        : never
-      : never
-  >
->[0];
-
-function tabIcon(name: IconName) {
-  return function TabIcon({ color, size }: TabIconProps) {
-    // Навигатор передаёт цвет строкой из tabBarActiveTintColor/InactiveTintColor.
-    return (
-      <Ionicons name={name} size={size} color={typeof color === 'string' ? color : undefined} />
-    );
-  };
-}
-
-export default function AppTabsLayout() {
+export default function AppStackLayout() {
   const { t } = useTranslation();
-  const { colors, typography } = useTheme();
+  const { colors } = useTheme();
+  const pendingCode = usePendingInvite((s) => s.code);
+  const clearPending = usePendingInvite((s) => s.setCode);
+
+  // Приглашение, открытое до входа, продолжаем сразу после входа.
+  useEffect(() => {
+    if (!pendingCode) return;
+    clearPending(null);
+    router.push({ pathname: '/join/[code]', params: { code: pendingCode } });
+  }, [pendingCode, clearPending]);
 
   return (
-    <Tabs
+    <Stack
       screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.textMuted,
-        tabBarStyle: {
-          backgroundColor: colors.surface,
-          borderTopColor: colors.border,
-          minHeight: 64,
-        },
-        tabBarLabelStyle: { fontSize: typography.caption.fontSize, fontWeight: '600' },
+        headerStyle: { backgroundColor: colors.surface },
+        headerTintColor: colors.primary,
+        headerTitleStyle: { color: colors.text },
+        contentStyle: { backgroundColor: colors.background },
+        headerBackTitle: t('common.back'),
       }}
     >
-      <Tabs.Screen
-        name="index"
-        options={{ title: t('tabs.quests'), tabBarIcon: tabIcon('compass-outline') }}
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="organizations/index" options={{ title: t('organizations.title') }} />
+      <Stack.Screen name="organizations/new" options={{ title: t('organizations.form.title') }} />
+      <Stack.Screen
+        name="organizations/search"
+        options={{ title: t('organizations.search.title') }}
       />
-      <Tabs.Screen
-        name="my-quests"
-        options={{ title: t('tabs.myQuests'), tabBarIcon: tabIcon('list-outline') }}
+      <Stack.Screen name="organizations/[orgId]/index" options={{ title: '' }} />
+      <Stack.Screen
+        name="organizations/[orgId]/invite/[inviteId]"
+        options={{ title: t('organizations.invite.title') }}
       />
-      <Tabs.Screen
-        name="benefit"
-        options={{ title: t('tabs.benefit'), tabBarIcon: tabIcon('trophy-outline') }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{ title: t('tabs.profile'), tabBarIcon: tabIcon('person-circle-outline') }}
-      />
-    </Tabs>
+      <Stack.Screen name="scan" options={{ title: t('organizations.scan.title') }} />
+    </Stack>
   );
 }

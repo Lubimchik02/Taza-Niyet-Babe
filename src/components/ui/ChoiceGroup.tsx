@@ -29,9 +29,10 @@ export function ChoiceGroup<T extends string>({
           return (
             <Pressable
               key={option.value}
-              accessibilityRole="radio"
-              accessibilityState={{ checked: selected }}
-              accessibilityLabel={option.label}
+              // aria-* работают и на iOS/Android, и в вебе (accessibilityState в веб не попадает).
+              role="radio"
+              aria-checked={selected}
+              aria-label={option.label}
               onPress={() => onChange(option.value)}
               style={{
                 minHeight: touchTarget.min,
