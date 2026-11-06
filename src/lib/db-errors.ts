@@ -53,6 +53,7 @@ export const DB_ERROR_CODES = [
   'no_confirmed_hours',
   'dispute_exists',
   'dispute_closed',
+  'invalid_push_token',
 ] as const;
 
 export type DbErrorCode = (typeof DB_ERROR_CODES)[number] | 'network' | 'generic';

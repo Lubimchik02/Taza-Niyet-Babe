@@ -3,6 +3,7 @@ import { Tabs } from 'expo-router';
 import type { ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useUnreadCount } from '@/features/notifications/queries';
 import { useTheme } from '@/theme/ThemeProvider';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
@@ -29,6 +30,7 @@ function tabIcon(name: IconName) {
 export default function AppTabsLayout() {
   const { t } = useTranslation();
   const { colors, typography } = useTheme();
+  const unread = useUnreadCount().data ?? 0;
 
   return (
     <Tabs
@@ -55,6 +57,15 @@ export default function AppTabsLayout() {
       <Tabs.Screen
         name="benefit"
         options={{ title: t('tabs.benefit'), tabBarIcon: tabIcon('trophy-outline') }}
+      />
+      <Tabs.Screen
+        name="notifications"
+        options={{
+          title: t('tabs.notifications'),
+          tabBarIcon: tabIcon('notifications-outline'),
+          tabBarBadge: unread > 0 ? (unread > 99 ? '99+' : unread) : undefined,
+          tabBarBadgeStyle: { backgroundColor: colors.danger, color: colors.onDanger },
+        }}
       />
       <Tabs.Screen
         name="profile"

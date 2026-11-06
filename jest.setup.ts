@@ -20,3 +20,21 @@ jest.mock('expo-sqlite/localStorage/install', () => {
   Object.defineProperty(globalThis, 'localStorage', { value: memoryStorage, configurable: true });
   return {};
 });
+
+// expo-notifications требует нативный модуль. В тестах пуши недоступны, как в Expo Go.
+jest.mock('expo-notifications', () => ({
+  setNotificationHandler: jest.fn(),
+  getPermissionsAsync: jest.fn(async () => ({ granted: false, status: 'undetermined' })),
+  requestPermissionsAsync: jest.fn(async () => ({ granted: false, status: 'denied' })),
+  setNotificationChannelAsync: jest.fn(async () => null),
+  getExpoPushTokenAsync: jest.fn(async () => {
+    throw new Error('no push in tests');
+  }),
+  getLastNotificationResponseAsync: jest.fn(async () => null),
+  clearLastNotificationResponseAsync: jest.fn(async () => {}),
+  addNotificationResponseReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
+  addNotificationReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
+  AndroidImportance: { HIGH: 6 },
+  IosAuthorizationStatus: { PROVISIONAL: 3 },
+  DEFAULT_ACTION_IDENTIFIER: 'expo.modules.notifications.actions.DEFAULT',
+}));

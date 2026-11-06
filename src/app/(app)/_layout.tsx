@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAttendanceSync } from '@/features/attendance/queue';
+import { useNotificationsSetup } from '@/features/notifications/queries';
 import { usePendingInvite } from '@/features/organizations/pending-invite-store';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -13,6 +14,8 @@ export default function AppStackLayout() {
   const clearPending = usePendingInvite((s) => s.setCode);
   // Офлайн-отметки уходят на сервер, как только появляется сеть.
   useAttendanceSync();
+  // Пуши: регистрация устройства, переход по нажатию, лента в реальном времени.
+  useNotificationsSetup();
 
   // Приглашение, открытое до входа, продолжаем сразу после входа.
   useEffect(() => {
@@ -55,6 +58,10 @@ export default function AppStackLayout() {
       <Stack.Screen
         name="organizations/[orgId]/leaderboard"
         options={{ title: t('benefit.leaderboard') }}
+      />
+      <Stack.Screen
+        name="notification-settings"
+        options={{ title: t('notifications.settings') }}
       />
       <Stack.Screen name="certificates/index" options={{ title: t('certificates.title') }} />
       <Stack.Screen name="certificates/[id]" options={{ title: t('certificates.detailTitle') }} />

@@ -72,6 +72,11 @@ export default function ProfileScreen() {
         title={t('profile.organizations')}
         onPress={() => router.push('/organizations')}
       />
+      <Button
+        variant="secondary"
+        title={t('profile.notifications')}
+        onPress={() => router.push('/notification-settings')}
+      />
 
       <ChoiceGroup<LanguageChoice>
         label={t('profile.language')}

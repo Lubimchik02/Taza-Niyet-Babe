@@ -78,6 +78,9 @@ shares_org_with`; `auth.uid()` в политиках оборачивать в `
   `.expo/types`).
 - Вложенные компоненты внутри рендера не объявлять (`function Form()` в теле компонента):
   поле ввода пересоздаётся на каждый символ и теряет фокус. Только JSX-значение или отдельный компонент.
+- Уведомления: только через `private.notify` в SQL — пуш уйдёт сам (`private.push_tick`).
+  Новый тип пуша: `private.push_types()` + `push_templates` (kk/ru/en) в миграции,
+  `PUSH_TYPES`/`PUSH_CATEGORIES` и `notifications.kinds` в локалях (сверяет `notifications-test`).
 - Экспорт: PDF — `lib/pdf-export`, файлы (CSV) — `lib/share-file` (у обоих есть `.web.ts`).
 - Нативные библиотеки без веб-версии (`react-native-maps`) — через пару файлов
   `X.native.tsx` (телефон) и `X.tsx` (веб-запасной вариант) с общими типами в `X.types.ts`.

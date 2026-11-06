@@ -10,7 +10,12 @@ export type Database = {
     };
     Functions: {
       graphql: {
-        Args: { extensions?: Json; operationName?: string; query?: string; variables?: Json };
+        Args: {
+          extensions?: Json;
+          operationName?: string;
+          query?: string;
+          variables?: Json;
+        };
         Returns: Json;
       };
     };
@@ -608,12 +613,45 @@ export type Database = {
           },
         ];
       };
+      notification_preferences: {
+        Row: {
+          created_at: string;
+          muted_types: string[];
+          updated_at: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          muted_types?: string[];
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          muted_types?: string[];
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'notification_preferences_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: true;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       notifications: {
         Row: {
           created_at: string;
           id: string;
           org_id: string | null;
           payload: NonNullable<Json>;
+          push_attempts: number;
+          push_status: string;
+          pushed_at: string | null;
           read_at: string | null;
           type: string;
           updated_at: string;
@@ -625,6 +663,9 @@ export type Database = {
           id?: string;
           org_id?: string | null;
           payload?: NonNullable<Json>;
+          push_attempts?: number;
+          push_status?: string;
+          pushed_at?: string | null;
           read_at?: string | null;
           type: string;
           updated_at?: string;
@@ -635,6 +676,9 @@ export type Database = {
           id?: string;
           org_id?: string | null;
           payload?: NonNullable<Json>;
+          push_attempts?: number;
+          push_status?: string;
+          pushed_at?: string | null;
           read_at?: string | null;
           type?: string;
           updated_at?: string;
@@ -878,6 +922,39 @@ export type Database = {
           updated_at?: string;
         };
         Relationships: [];
+      };
+      push_tokens: {
+        Row: {
+          created_at: string;
+          platform: string;
+          token: string;
+          updated_at: string;
+          user_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          platform: string;
+          token: string;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          platform?: string;
+          token?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'push_tokens_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       quest_signups: {
         Row: {
@@ -1344,7 +1421,10 @@ export type Database = {
           isSetofReturn: false;
         };
       };
-      cancel_join_request: { Args: { p_request_id: string }; Returns: undefined };
+      cancel_join_request: {
+        Args: { p_request_id: string };
+        Returns: undefined;
+      };
       cancel_signup: {
         Args: { p_quest_id: string };
         Returns: {
@@ -1437,7 +1517,10 @@ export type Database = {
           isSetofReturn: false;
         };
       };
-      confirm_hours: { Args: { p_items: Json; p_quest_id: string }; Returns: number };
+      confirm_hours: {
+        Args: { p_items: Json; p_quest_id: string };
+        Returns: number;
+      };
       create_invite: {
         Args: {
           p_expires_in_hours?: number;
@@ -1614,7 +1697,10 @@ export type Database = {
         }[];
       };
       list_disputes: {
-        Args: { p_org_id: string; p_status?: Database['public']['Enums']['dispute_status'] };
+        Args: {
+          p_org_id: string;
+          p_status?: Database['public']['Enums']['dispute_status'];
+        };
         Returns: {
           comment: string;
           confirmed_by_name: string;
@@ -1851,6 +1937,10 @@ export type Database = {
           waitlisted: number;
         }[];
       };
+      register_push_token: {
+        Args: { p_platform: string; p_token: string };
+        Returns: undefined;
+      };
       request_to_join: {
         Args: { p_message?: string; p_org_id: string };
         Returns: {
@@ -1925,7 +2015,12 @@ export type Database = {
       };
       revoke_invite: { Args: { p_invite_id: string }; Returns: undefined };
       save_quest: {
-        Args: { p_data: Json; p_org_id: string; p_quest_id?: string; p_skill_ids?: string[] };
+        Args: {
+          p_data: Json;
+          p_org_id: string;
+          p_quest_id?: string;
+          p_skill_ids?: string[];
+        };
         Returns: {
           address: string;
           after_photo_path: string | null;
@@ -1973,7 +2068,10 @@ export type Database = {
         }[];
       };
       set_member_role: {
-        Args: { p_membership_id: string; p_role: Database['public']['Enums']['org_role'] };
+        Args: {
+          p_membership_id: string;
+          p_role: Database['public']['Enums']['org_role'];
+        };
         Returns: {
           created_at: string;
           id: string;
@@ -2101,6 +2199,7 @@ export type Database = {
           isSetofReturn: false;
         };
       };
+      unregister_push_token: { Args: { p_token: string }; Returns: undefined };
       verify_certificate: {
         Args: { p_id: string };
         Returns: {
@@ -2148,7 +2247,9 @@ export type Tables<
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
     : never) = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
   ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
       DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
       Row: infer R;
@@ -2171,7 +2272,9 @@ export type TablesInsert<
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
     : never) = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
       Insert: infer I;
     }
@@ -2193,7 +2296,9 @@ export type TablesUpdate<
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
     : never) = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
       Update: infer U;
     }
@@ -2215,7 +2320,9 @@ export type Enums<
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
     : never) = never,
-> = DefaultSchemaEnumNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
   ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
     ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
@@ -2229,7 +2336,9 @@ export type CompositeTypes<
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
     : never) = never,
-> = PublicCompositeTypeNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
   ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
     ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]

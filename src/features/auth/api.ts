@@ -1,5 +1,6 @@
 import { AuthError } from '@supabase/supabase-js';
 
+import { releasePushToken } from '@/features/notifications/registration';
 import { isSupabaseConfigured, supabase } from '@/lib/supabase';
 
 import type { Contact } from './schemas';
@@ -66,6 +67,8 @@ export async function verifyOtp(contact: Contact, token: string): Promise<void> 
 }
 
 export async function signOut(): Promise<void> {
+  // Пока сессия жива: сервер должен забыть этот телефон до выхода, иначе пуши продолжат приходить.
+  await releasePushToken();
   const { error } = await supabase.auth.signOut();
   if (error) throw mapAuthError(error);
 }
