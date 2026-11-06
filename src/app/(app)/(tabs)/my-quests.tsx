@@ -4,7 +4,7 @@ import { Pressable, RefreshControl, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AppText } from '@/components/ui/AppText';
-import { Button } from '@/components/ui/Button';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { Card } from '@/components/ui/Card';
 import { QueryState } from '@/components/ui/QueryState';
 import type { MyQuest } from '@/features/quests/api';
@@ -40,10 +40,11 @@ export default function MyQuestsScreen() {
         />
 
         {mine.data?.length === 0 ? (
-          <View style={{ gap: spacing.md }}>
-            <AppText tone="muted">{t('quests.my.empty')}</AppText>
-            <Button title={t('quests.my.findQuests')} onPress={() => router.navigate('/')} />
-          </View>
+          <EmptyState
+            icon="calendar-outline"
+            title={t('quests.my.empty')}
+            action={{ title: t('quests.my.findQuests'), onPress: () => router.navigate('/') }}
+          />
         ) : null}
 
         <Group title={t('quests.my.active')} quests={groups.active} />

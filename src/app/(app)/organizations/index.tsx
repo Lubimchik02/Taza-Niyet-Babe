@@ -1,9 +1,10 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, View } from 'react-native';
+import { Pressable } from 'react-native';
 
 import { AppText } from '@/components/ui/AppText';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { QueryState } from '@/components/ui/QueryState';
@@ -12,11 +13,9 @@ import { TextField } from '@/components/ui/TextField';
 import { RoleBadge } from '@/features/organizations/components/RoleBadge';
 import { parseInviteCode } from '@/features/organizations/invite-link';
 import { useMyOrganizations } from '@/features/organizations/queries';
-import { useTheme } from '@/theme/ThemeProvider';
 
 export default function OrganizationsScreen() {
   const { t } = useTranslation();
-  const { spacing } = useTheme();
   const orgs = useMyOrganizations();
   const [code, setCode] = useState('');
   const [codeError, setCodeError] = useState<string | undefined>();
@@ -41,10 +40,11 @@ export default function OrganizationsScreen() {
       />
 
       {orgs.data?.length === 0 ? (
-        <View style={{ gap: spacing.xs }}>
-          <AppText variant="heading">{t('organizations.empty')}</AppText>
-          <AppText tone="muted">{t('organizations.emptyHint')}</AppText>
-        </View>
+        <EmptyState
+          icon="people-outline"
+          title={t('organizations.empty')}
+          body={t('organizations.emptyHint')}
+        />
       ) : null}
 
       {orgs.data?.map((org) => (

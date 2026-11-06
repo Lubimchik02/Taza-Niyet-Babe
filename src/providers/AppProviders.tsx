@@ -5,8 +5,12 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { useSettings } from '@/features/settings/settings-store';
 import i18n, { systemLanguage } from '@/i18n';
+import { installOnlineManager } from '@/lib/network';
 import { queryClient } from '@/lib/query-client';
 import { AppThemeProvider } from '@/theme/ThemeProvider';
+
+// Запросы знают о сети: без связи ждут, а не падают с ошибкой.
+installOnlineManager();
 
 /** Синхронизирует язык i18next с выбором пользователя (или системой). */
 function LanguageSync() {

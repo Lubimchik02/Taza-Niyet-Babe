@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
 import { AppText } from '@/components/ui/AppText';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { Card } from '@/components/ui/Card';
 import { ChoiceGroup } from '@/components/ui/ChoiceGroup';
 import { QueryState } from '@/components/ui/QueryState';
@@ -47,7 +48,7 @@ export default function LeaderboardScreen() {
         onRetry={() => void board.refetch()}
       />
       {board.data?.length === 0 ? (
-        <AppText tone="muted">{t('benefit.leaderboardEmpty')}</AppText>
+        <EmptyState icon="podium-outline" title={t('benefit.leaderboardEmpty')} />
       ) : null}
 
       <Card>

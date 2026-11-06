@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Pressable } from 'react-native';
 
 import { AppText } from '@/components/ui/AppText';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { QueryState } from '@/components/ui/QueryState';
@@ -60,7 +61,13 @@ export default function CertificatesScreen() {
         error={mine.error}
         onRetry={() => void mine.refetch()}
       />
-      {mine.data?.length === 0 ? <AppText tone="muted">{t('certificates.empty')}</AppText> : null}
+      {mine.data?.length === 0 ? (
+        <EmptyState
+          icon="ribbon-outline"
+          title={t('certificates.empty')}
+          body={orgs.data?.length ? undefined : t('certificates.emptyHint')}
+        />
+      ) : null}
       {mine.data?.map((c) => (
         <Pressable
           key={c.id}

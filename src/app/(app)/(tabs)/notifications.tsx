@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
 import { AppText } from '@/components/ui/AppText';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { QueryState } from '@/components/ui/QueryState';
@@ -51,7 +52,7 @@ export default function NotificationsScreen() {
         onRetry={() => void list.refetch()}
       />
       {list.data && items.length === 0 ? (
-        <AppText tone="muted">{t('notifications.empty')}</AppText>
+        <EmptyState icon="notifications-outline" title={t('notifications.empty')} />
       ) : null}
 
       {(unread.data ?? 0) > 0 ? (

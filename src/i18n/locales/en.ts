@@ -8,9 +8,14 @@ const en: Translation = {
     back: 'Back',
     loading: 'Loading…',
     retry: 'Retry',
-    comingSoon: 'Coming soon',
     cancel: 'Cancel',
     close: 'Close',
+    offline:
+      'No connection. Check-ins are saved on the phone and will be sent when you are back online.',
+    errorTitle: 'Something went wrong',
+    errorBody:
+      'This screen failed to open. Your hours and check-ins are safe — they are stored on the server.',
+    goHome: 'Go to home',
   },
   onboarding: {
     skip: 'Skip',
@@ -238,6 +243,8 @@ const en: Translation = {
     fromYou: '{{distance}} away',
     empty: 'No quests match the selected filters.',
     emptyNoQuests: 'No upcoming quests yet.',
+    emptyNoQuestsHint: 'Check back later or explore other organizations.',
+    resetFilters: 'Reset filters',
     create: 'Create quest',
     places: 'Places: {{taken}} / {{capacity}}',
     waitlistCount: 'Waiting: {{count}}',
@@ -478,6 +485,7 @@ const en: Translation = {
   certificates: {
     title: 'Certificates',
     empty: 'No certificates yet.',
+    emptyHint: 'You can issue a certificate once you have confirmed hours in an organization.',
     issueFor: 'Get a certificate: {{org}}',
     issueHint:
       'A certificate records your confirmed hours at the moment of issue. You can issue a new one later.',
@@ -716,9 +724,6 @@ const en: Translation = {
     },
   },
   placeholders: {
-    quests: 'Quest feed from your organizations.',
-    myQuests: 'Upcoming, active and completed quests.',
-    benefit: 'Confirmed hours, level, skills and achievements.',
     noOrganizations: 'Quests will appear once you join an organization.',
   },
   profile: {

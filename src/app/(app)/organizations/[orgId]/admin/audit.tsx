@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
 import { AppText } from '@/components/ui/AppText';
+import { EmptyState } from '@/components/ui/EmptyState';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { QueryState } from '@/components/ui/QueryState';
@@ -52,7 +53,7 @@ export default function AuditScreen() {
     <Screen scroll edges={['bottom']}>
       <QueryState isLoading={log.isLoading} error={log.error} onRetry={() => void log.refetch()} />
       {log.data && items.length === 0 ? (
-        <AppText tone="muted">{t('admin.auditEmpty')}</AppText>
+        <EmptyState icon="document-text-outline" title={t('admin.auditEmpty')} />
       ) : null}
       <Card>
         {items.map((item) => {

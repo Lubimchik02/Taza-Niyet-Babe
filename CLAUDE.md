@@ -110,6 +110,7 @@ npm test               # Jest
 npx expo install <pkg> # ВСЕГДА вместо npm install для зависимостей приложения (совместимые версии)
 npx expo-doctor        # проверка зависимостей и конфигурации
 npm run db:start       # локальный Supabase (нужен запущенный Docker Desktop)
+npm run setup:env      # записать URL и publishable key локального Supabase в .env
 npm run db:reset       # пересоздать БД: миграции + seed
 npm run db:test        # pgTAP-тесты RLS и схемы
 npm run db:types       # сгенерировать типы БД для клиента
@@ -141,6 +142,10 @@ npm run db:types       # сгенерировать типы БД для кли�
 
 ## UI и доступность
 
+- Загрузка и ошибки запросов — `QueryState` (скелетон, текст по коду, «Повторить»);
+  пустые списки — `EmptyState` с понятным следующим шагом, а не голый текст.
+- Анимации — только `FadeIn` / `PopIn` / `useReducedMotion` (отключаются системной настройкой
+  «Уменьшить движение»); `Animated.Value` хранить в `useState`, не в `useRef` (React Compiler).
 - Координатор работает на улице в перчатках: основные кнопки ≥ 56 dp, остальные цели ≥ 48 dp.
 - У интерактивных элементов есть `role` и понятный `aria-label`; состояние — через `aria-checked`,
   `aria-disabled`, `aria-busy` (не `accessibilityState`: в вебе он не доходит до экранного чтеца).

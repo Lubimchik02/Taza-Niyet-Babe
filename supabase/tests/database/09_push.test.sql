@@ -126,10 +126,12 @@ select is((select status from public.signup_for_quest(current_setting('t.q4')::u
   'waitlisted'::public.signup_status, 'На заполненный квест — в лист ожидания');
 reset role;
 select is((select count(*)::int from public.notifications
-           where user_id = current_setting('t.vol8')::uuid and type = 'signup_confirmed'), 2,
+           where user_id = current_setting('t.vol8')::uuid and type = 'signup_confirmed'
+             and payload ->> 'quest_id' = current_setting('t.q7')), 2,
   'Повторная запись после отмены — снова уведомление');
 select is((select count(*)::int from public.notifications
-           where user_id = current_setting('t.vol9')::uuid and type = 'signup_confirmed'), 0,
+           where user_id = current_setting('t.vol9')::uuid and type = 'signup_confirmed'
+             and payload ->> 'quest_id' = current_setting('t.q4')), 0,
   'Лист ожидания — не «запись подтверждена»');
 
 -- =========================== Напоминания ===========================

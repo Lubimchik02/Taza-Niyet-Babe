@@ -1,8 +1,9 @@
-import { Stack } from 'expo-router';
+import { Stack, type ErrorBoundaryProps } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 
+import { ErrorScreen } from '@/components/ui/ErrorScreen';
 import { startSessionListener, useSession } from '@/features/auth/session-store';
 import { useSettings, useSettingsHydrated } from '@/features/settings/settings-store';
 import { AppProviders } from '@/providers/AppProviders';
@@ -57,6 +58,15 @@ function RootNavigator() {
         <Stack.Screen name="verify/[id]" />
       </Stack>
     </>
+  );
+}
+
+/** Последний рубеж: если упал сам корень, поднимаем провайдеры заново, чтобы показать экран ошибки. */
+export function ErrorBoundary(props: ErrorBoundaryProps) {
+  return (
+    <AppProviders>
+      <ErrorScreen {...props} />
+    </AppProviders>
   );
 }
 

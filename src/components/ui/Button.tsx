@@ -1,5 +1,6 @@
 import { ActivityIndicator, Pressable, StyleSheet, View, type PressableProps } from 'react-native';
 
+import { useReducedMotion } from '@/lib/use-reduced-motion';
 import { useTheme } from '@/theme/ThemeProvider';
 
 import { AppText } from './AppText';
@@ -25,6 +26,7 @@ export function Button({
 }: ButtonProps) {
   const { colors, radius, spacing, touchTarget } = useTheme();
   const isDisabled = disabled || loading;
+  const reducedMotion = useReducedMotion();
 
   const palette = {
     primary: { bg: colors.primary, fg: colors.onPrimary, border: colors.primary },
@@ -51,6 +53,8 @@ export function Button({
           backgroundColor: palette.bg,
           borderColor: palette.border,
           opacity: isDisabled ? 0.5 : pressed ? 0.85 : 1,
+          // Нажатие чувствуется и в перчатках: кнопка слегка «утапливается».
+          transform: [{ scale: pressed && !isDisabled && !reducedMotion ? 0.97 : 1 }],
         },
       ]}
       {...rest}

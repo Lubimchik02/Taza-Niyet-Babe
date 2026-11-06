@@ -7,7 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppText } from '@/components/ui/AppText';
 import { Button } from '@/components/ui/Button';
 import { ChoiceGroup } from '@/components/ui/ChoiceGroup';
-import { Placeholder } from '@/components/ui/Placeholder';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { FadeIn } from '@/components/ui/FadeIn';
 import { QueryState } from '@/components/ui/QueryState';
 import { useMyOrganizations } from '@/features/organizations/queries';
 import { FeedFiltersPanel } from '@/features/quests/components/FeedFiltersPanel';
@@ -45,17 +46,18 @@ export default function QuestsScreen() {
         edges={['top']}
         style={{
           flex: 1,
+          justifyContent: 'center',
           backgroundColor: colors.background,
           padding: spacing.xl,
           gap: spacing.lg,
         }}
       >
-        <Placeholder
+        <EmptyState
           icon="compass-outline"
           title={t('tabs.quests')}
           body={t('placeholders.noOrganizations')}
+          action={{ title: t('organizations.join'), onPress: () => router.push('/organizations') }}
         />
-        <Button title={t('organizations.join')} onPress={() => router.push('/organizations')} />
         <Button
           variant="secondary"
           title={t('organizations.find')}
@@ -130,15 +132,32 @@ export default function QuestsScreen() {
         />
 
         {feed.data && quests.length === 0 ? (
-          <AppText tone="muted" align="center">
-            {feed.data.length === 0 ? t('quests.emptyNoQuests') : t('quests.empty')}
-          </AppText>
+          feed.data.length === 0 ? (
+            <EmptyState
+              icon="leaf-outline"
+              title={t('quests.emptyNoQuests')}
+              body={t('quests.emptyNoQuestsHint')}
+            />
+          ) : (
+            <EmptyState
+              icon="funnel-outline"
+              title={t('quests.empty')}
+              action={{
+                title: t('quests.resetFilters'),
+                onPress: () => setFilters(DEFAULT_FILTERS),
+              }}
+            />
+          )
         ) : null}
 
         {view === 'map' && quests.length > 0 ? (
           <QuestMap quests={quests} origin={location.coords} />
         ) : (
-          quests.map((q) => <QuestCard key={q.id} quest={q} />)
+          quests.map((q, index) => (
+            <FadeIn key={q.id} delay={index * 40}>
+              <QuestCard quest={q} />
+            </FadeIn>
+          ))
         )}
       </ScrollView>
     </SafeAreaView>

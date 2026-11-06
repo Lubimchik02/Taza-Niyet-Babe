@@ -1,41 +1,45 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, View } from 'react-native';
+import { View } from 'react-native';
 
 import { toDbError } from '@/lib/db-errors';
 import { useTheme } from '@/theme/ThemeProvider';
 
 import { AppText } from './AppText';
 import { Button } from './Button';
+import { SkeletonList } from './Skeleton';
 
 interface QueryStateProps {
   isLoading: boolean;
   error: unknown;
   onRetry: () => void;
+  /** Сколько карточек-заглушек показать при загрузке. */
+  skeletonRows?: number;
 }
 
-/** Индикатор загрузки или понятная ошибка с кнопкой «Повторить». null — данные готовы. */
-export function QueryState({ isLoading, error, onRetry }: QueryStateProps) {
+/** Скелетон при загрузке или понятная ошибка с кнопкой «Повторить». null — данные готовы. */
+export function QueryState({ isLoading, error, onRetry, skeletonRows = 3 }: QueryStateProps) {
   const { t } = useTranslation();
   const { colors, spacing } = useTheme();
 
-  if (isLoading) {
-    return (
-      <View style={{ padding: spacing.xl, alignItems: 'center' }}>
-        <ActivityIndicator
-          size="large"
-          color={colors.primary}
-          accessibilityLabel={t('common.loading')}
-        />
-      </View>
-    );
-  }
+  if (isLoading) return <SkeletonList rows={skeletonRows} />;
   if (error) {
+    const code = toDbError(error).code;
     return (
-      <View style={{ gap: spacing.md }}>
-        <AppText tone="danger" accessibilityRole="alert">
-          {t(`errors.${toDbError(error).code}`)}
+      <View style={{ gap: spacing.md, alignItems: 'center', paddingVertical: spacing.lg }}>
+        <Ionicons
+          name={code === 'network' ? 'cloud-offline-outline' : 'alert-circle-outline'}
+          size={40}
+          color={colors.danger}
+          accessibilityElementsHidden
+          importantForAccessibility="no"
+        />
+        <AppText tone="danger" align="center" accessibilityRole="alert">
+          {t(`errors.${code}`)}
         </AppText>
-        <Button variant="secondary" title={t('common.retry')} onPress={onRetry} />
+        <View style={{ alignSelf: 'stretch' }}>
+          <Button variant="secondary" title={t('common.retry')} onPress={onRetry} />
+        </View>
       </View>
     );
   }
