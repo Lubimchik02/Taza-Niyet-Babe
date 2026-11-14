@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Taza Niyet — макет приложения</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--sf:#F5FCE6;--hair:#E3F3BD;--tx:#2B8000;--t2:#3F8400;--pr:#8CC914;--onpr:#285000;--lime:linear-gradient(160deg,#D7FF99,#F3FF99);--page:#E8F8BC;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:linear-gradient(160deg,#D7FF99,#F3FF99);color:var(--tx);font:500 15px/1.4 Manrope,system-ui,sans-serif;display:flex;align-items:center;justify-content:center}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.phone{position:relative;width:390px;height:min(820px,100%);background:var(--bg);border-radius:44px;border:8px solid #fff;overflow:hidden;box-shadow:0 30px 80px #5a8a0040}
+@media(max-width:500px){.phone{width:100%;height:100%;border:0;border-radius:0}}
+.view{height:100%;overflow-y:auto;padding:0 0 120px;background:linear-gradient(#E9FFB8,#fff 280px) no-repeat;animation:in .25s ease}
+@keyframes in{from{opacity:0;transform:translateY(6px)}}
+@media(prefers-reduced-motion:reduce){.view{animation:none}}
+.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px 16px 6px}
+.top>b{font-size:17px;font-weight:800;display:flex;gap:6px;align-items:center}
+.top>:last-child{justify-self:end}
+.pillbtn{display:flex;gap:6px;align-items:center;background:#ffffffcc;border:1px solid var(--hair);border-radius:99px;padding:8px 14px;font-weight:700;font-size:14px;justify-self:start}
+.cb{width:40px;height:40px;border-radius:50%;background:#ffffffcc;border:1px solid var(--hair);display:grid;place-items:center}
+.stories{display:flex;gap:14px;overflow-x:auto;padding:10px 16px 8px;scrollbar-width:none}
+.st{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:12px;font-weight:700;min-width:60px}
+.av{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:19px;color:var(--onpr);background:var(--lime);flex:none}
+.rg{padding:2px;border-radius:50%;background:var(--hair)}.rg.on{background:var(--pr)}.rg .av{border:2px solid #fff}
+.seg{display:flex;gap:4px;background:var(--sf);border-radius:99px;padding:4px;margin:6px 16px 4px}
+.seg button{flex:1;padding:8px 0;border-radius:99px;font-weight:700;font-size:13px;color:var(--t2)}
+.seg .on{background:#fff;color:var(--tx);box-shadow:0 1px 5px #8cc91455}
+.it{display:flex;gap:12px;padding:0 16px;width:100%;text-align:left;align-items:center}
+.it .av{width:56px;height:56px}
+.bd{flex:1;min-width:0;padding:11px 0;border-bottom:1px solid var(--hair);display:grid;grid-template-columns:1fr auto;gap:3px 8px;align-items:center}
+.tt{font-weight:800;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb{font-size:14px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tm{font-size:12px;color:var(--t2);justify-self:end}
+.badge{min-width:26px;height:26px;padding:0 9px;border-radius:99px;background:var(--pr);color:var(--onpr);font-weight:800;font-size:13px;display:grid;place-items:center;justify-self:end}
+.grp{background:var(--sf);border-radius:20px;margin:12px 16px;overflow:hidden}
+.r{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--hair);width:100%;text-align:left}
+.r:last-child{border:0}.r .v{margin-left:auto;color:var(--t2)}
+.bar{height:6px;border-radius:9px;background:#fff;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--pr);border-radius:9px}
+.cta{display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;margin:16px;width:calc(100% - 32px);border-radius:99px;background:var(--pr);color:var(--onpr);font-weight:800;font-size:16px}
+.cta.o{background:var(--sf);color:var(--tx)}
+.ctr{text-align:center;padding:6px 16px}
+.big{font-size:56px;font-weight:800;line-height:1;letter-spacing:-.03em}
+h1{font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.h2{padding:14px 20px 0;font-size:13px;font-weight:800;color:var(--t2);text-transform:uppercase;letter-spacing:.06em}
+.dock{position:absolute;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;gap:10px;align-items:center}
+.phone.sub .dock{display:none}
+.pill{flex:1;display:flex;background:#ffffffe6;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:34px;padding:5px;box-shadow:0 8px 30px #5a8a0030;border:1px solid var(--hair)}
+.pill button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 0 6px;border-radius:28px;font-size:10.5px;font-weight:700;color:var(--t2)}
+.pill .on{background:var(--sf);color:var(--tx)}
+.dot{position:absolute;top:8px;right:9px;width:10px;height:10px;border-radius:50%;background:var(--pr);border:2px solid #fff}
+.cb{position:relative}
+.cp{display:flex;gap:6px;align-items:center;padding:9px 14px;border-radius:99px;background:#ffffffe6;border:1px solid var(--hair);font-weight:700;font-size:13px}.cp.on{background:var(--pr);color:var(--onpr)}
+.cp .ic{width:16px;height:16px}
+.mb{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--pr);color:var(--onpr);flex:none}.mb .ic{width:13px;height:13px}
+.view.mp{padding:0;overflow:hidden;background:#F1FBD4}.mapw{position:relative;height:100%}.mapw svg{display:block}
+.mtop{position:absolute;top:12px;left:12px;right:12px;display:flex;gap:8px;flex-wrap:wrap}
+.sheet{position:absolute;left:12px;right:12px;bottom:88px;background:#fff;border-radius:24px;padding:14px;box-shadow:0 10px 34px #5a8a0040;border:1px solid var(--hair)}
+.hint{position:absolute;left:50%;transform:translateX(-50%);bottom:92px;background:#ffffffe6;padding:8px 16px;border-radius:99px;font-weight:700;font-size:13px;border:1px solid var(--hair);white-space:nowrap}
+.toast{position:absolute;left:24px;right:24px;bottom:96px;background:var(--tx);color:#fff;padding:12px 16px;border-radius:99px;font-weight:700;text-align:center;opacity:0;transform:translateY(10px);transition:.25s;pointer-events:none}.toast.show{opacity:1;transform:none}
+.qr{width:190px;height:190px;margin:14px auto;display:block}
+.ok{display:inline-flex;gap:6px;align-items:center;background:var(--pr);color:var(--onpr);font-weight:800;border-radius:99px;padding:6px 14px;font-size:13px}
+.bk{margin:10px 16px 0}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);text-align:center}.row3>div{padding:14px 4px}.row3 b{font-size:22px;font-weight:800;display:block}.row3 span{font-size:12px;color:var(--t2)}
+</style>
+</head>
+<body>
+<div class="phone" id="phone">
+  <main class="view" id="view"></main>
+  <nav class="dock" aria-label="Разделы"><div class="pill" id="pill"></div></nav>
+  <div class="toast" id="toast" role="status"></div>
+</div>
+<script>
+const I={home:'M3 11l9-8 9 8v10h-6v-6H9v6H3z',list:'M5 7l2 2 3-3M5 15l2 2 3-3M13 8h7M13 16h7',star:'M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z',bell:'M6 16V11a6 6 0 1112 0v5l2 2H4zM10 21h4',user:'M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0',back:'M15 5l-7 7 7 7',chev:'M9 5l7 7-7 7',pin:'M12 21s7-6 7-11a7 7 0 10-14 0c0 5 7 11 7 11zM12 12a2 2 0 100-4 2 2 0 000 4z',clock:'M12 7v5l3 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z',qr:'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h3v3h-3zM20 14v6h-3',shield:'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6zM8.5 12l2.5 2.5 4.5-5',cal:'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',users:'M9 11a3 3 0 100-6 3 3 0 000 6zM3 20a6 6 0 0112 0M17 11a3 3 0 100-6M21 20a6 6 0 00-4-5.6',check:'M5 13l4 4L19 7',award:'M12 15a6 6 0 100-12 6 6 0 000 12zM8.5 14L7 22l5-3 5 3-1.5-8',leaf:'M5 19c0-9 5-14 15-14 0 10-5 15-14 15M5 19l8-8',flame:'M12 3c1 4 5 5 5 10a5 5 0 01-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-6 1-9z',tree:'M12 3l6 8h-4l5 7H5l5-7H6zM12 18v3',search:'M11 18a7 7 0 100-14 7 7 0 000 14zM21 21l-5-5',globe:'M12 21a9 9 0 100-18 9 9 0 000 18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18',map:'M9 4l-6 2v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14',trophy:'M8 4h8v5a4 4 0 01-8 0zM8 6H4v1a3 3 0 003 3M16 6h4v1a3 3 0 01-3 3M12 13v4M8 21h8M10 17h4',doc:'M7 3h8l4 4v14H7zM15 3v4h4M10 12h6M10 16h6',lock:'M6 11h12v9H6zM9 11V8a3 3 0 016 0v3',camera:'M4 8h4l2-3h4l2 3h4v11H4zM12 17a3.5 3.5 0 100-7 3.5 3.5 0 000 7z',plus:'M12 5v14M5 12h14',phone:'M8 3h8v18H8zM11 18h2',tablet:'M5 4h14v16H5zM11 17h2',laptop:'M5 6h14v9H5zM3 19h18'};
+const ic=n=>`<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="${I[n]}"/></svg>`;
+const Q=[
+{id:1,t:'Уборка набережной Ишима',o:'TazaQala',d:'e',dl:'Лёгкий',when:'Сб, 21 ноя · 10:00',h:3,km:'1,2',n:12,max:20,pts:90,tx:'Вместе соберём мусор вдоль набережной. Перчатки, мешки и перекус выдаём на месте.'},
+{id:2,t:'Помощь приюту «Добрые лапы»',o:'Добрые лапы',d:'m',dl:'Средний',when:'Вс, 22 ноя · 12:00',h:4,km:'3,5',n:6,max:10,pts:180,tx:'Выгул собак, уборка вольеров, помощь с кормлением. Нужна удобная одежда.'},
+{id:3,t:'Раздача продуктовых наборов',o:'Қамқор',d:'m',dl:'Средний',when:'Сб, 28 ноя · 09:00',h:5,km:'5,0',n:15,max:15,pts:225,tx:'Фасовка и раздача наборов семьям. Мест нет — можно встать в лист ожидания.'},
+{id:4,t:'Посадка деревьев в парке',o:'Жасыл Ел',d:'h',dl:'Сложный',when:'Вс, 29 ноя · 11:00',h:6,km:'8,4',n:9,max:30,pts:360,tx:'Копаем, сажаем, поливаем. Физически тяжело: берите воду и крепкую обувь.'}];
+const S={tab:'home',scr:null,signed:{2:1},filter:'Все',org:null,role:'vol',spot:null,near:true,sev:2};
+const R={new:{h:8},vol:{h:38},pro:{h:120},mentor:{h:210,m:1}};
+const H=()=>R[S.role].h,M=()=>!!R[S.role].m,canRep=()=>M()||H()>=115;
+const lab=()=>M()?'Наставник':H()>=115?'Опытный волонтёр':H()>=15?'Волонтёр':'Новичок';
+const mb=`<span class="mb" title="Наставник">${ic('shield')}</span>`;
+const SP=[{id:'a',x:80,y:190,t:'Стихийная свалка у набережной',km:1.2,sv:3,q:1,ago:'вчера',d:'Пластик, стекло и стройотходы вдоль берега, около 40 м.'},{id:'b',x:240,y:150,t:'Мусор у приюта и пустыря',km:3.5,sv:2,q:2,ago:'2 дня назад',d:'Пакеты и мусор на пустыре рядом с приютом.'},{id:'c',x:275,y:400,t:'Переполненные контейнеры во дворе',km:5,sv:2,q:3,ago:'3 дня назад',d:'Мусор вывозят редко, вокруг баков разбросаны отходы.'},{id:'d',x:120,y:540,t:'Овраг за парком',km:8.4,sv:3,q:4,ago:'4 дня назад',d:'Бытовой мусор в овраге, нужна посадка и уборка.'},{id:'e',x:190,y:320,t:'Бутылки на детской площадке',km:0.6,sv:1,q:null,ago:'сегодня',d:'Стекло и пакеты на площадке. Задание ещё не создано.'},{id:'f',x:55,y:420,t:'Мусор у остановки',km:2.3,sv:1,q:null,ago:'сегодня',d:'Заросли с мусором у остановки. Ждёт наставника.'}];
+const $=s=>document.querySelector(s);
+const dots=q=>'●'.repeat({e:1,m:2,h:3}[q.d]);
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.i);toast.i=setTimeout(()=>t.classList.remove('show'),1800)};
+function qr(){let c='';const N=21;for(let y=0;y<N;y++)for(let x=0;x<N;x++){const f=(x<7&&y<7)||(x>13&&y<7)||(x<7&&y>13);let on;if(f){const a=x>13?x-14:x,b=y>13?y-14:y;on=a==0||a==6||b==0||b==6||(a>1&&a<5&&b>1&&b<5)}else on=((x*7+y*13+x*y)%5<2);if(on)c+=`<rect x="${x}" y="${y}" width="1" height="1"/>`}return `<svg class="qr" viewBox="0 0 21 21" fill="#14260A" aria-label="QR-код">${c}</svg>`}
+const hdr=(t,l,r)=>`<div class="top">${l||'<span></span>'}<b>${t}</b>${r||'<span></span>'}</div>`;
+const back=()=>`<button class="cb bk" data-back aria-label="Назад">${ic('back')}</button>`;
+const item=q=>`<button class="it" data-q="${q.id}"><span class="av">${q.o[0]}</span><span class="bd"><b class="tt">${q.t}</b><span class="tm">${S.signed[q.id]?'✓ ':''}${q.when.replace(/, \d+ \S+ · /,' ')}</span><span class="sb">${dots(q)} ${q.dl} · ${q.km} км · ${q.n}/${q.max}</span><span class="badge">+${q.pts}</span></span></button>`;
+const V={
+home(){const f=['Все','Лёгкие','Средние','Сложные'],mp={Лёгкие:'e',Средние:'m',Сложные:'h'},orgs=[...new Set(Q.map(q=>q.o))];
+const list=Q.filter(q=>(S.filter==='Все'||q.d===mp[S.filter])&&(!S.org||q.o===S.org));
+return hdr('Квесты '+ic('leaf'),`<span class="pillbtn">${ic('pin')}Астана</span>`,`<button class="cb" data-tab="notif" aria-label="Уведомления">${ic('bell')}<i class="dot"></i></button>`)+
+`<div class="stories"><button class="st" data-org=""><span class="rg ${!S.org?'on':''}"><span class="av">${ic('leaf')}</span></span>Все</button>${orgs.map(o=>`<button class="st" data-org="${o}"><span class="rg ${S.org===o?'on':''}"><span class="av">${o[0]}</span></span>${o.length>9?o.slice(0,8)+'…':o}</button>`).join('')}</div>
+<div class="seg">${f.map(x=>`<button class="${S.filter===x?'on':''}" data-f="${x}">${x}</button>`).join('')}</div>
+${banner()}<div>${list.map(item).join('')||'<p class="ctr" style="padding:40px;color:var(--t2)">Ничего не найдено</p>'}</div>`},
+detail(q){const s=S.signed[q.id],full=q.n===q.max;
+return back()+`<div class="ctr" style="margin-top:6px"><span class="av" style="width:88px;height:88px;font-size:34px;margin:0 auto 14px">${q.o[0]}</span><h1>${q.t}</h1><p style="color:var(--t2);margin-top:6px">${q.o} · ${dots(q)} ${q.dl}</p></div>
+<div class="grp"><div class="r">${ic('cal')}${q.when}</div><div class="r">${ic('clock')}${q.h} ч<span class="v">до ${q.pts} баллов</span></div><div class="r">${ic('pin')}${q.km} км от вас</div><div class="r">${ic('shield')}Задание от наставника<span class="v">Данияр С.</span></div><div class="r" style="display:block"><div style="display:flex;gap:12px;align-items:center">${ic('users')}Записано<span class="v">${q.n} из ${q.max}</span></div><div class="bar"><i style="width:${q.n/q.max*100}%"></i></div></div></div>
+<div class="grp"><div class="r" style="display:block"><b>О задании</b><p style="color:var(--t2);margin-top:4px">${q.tx}</p></div></div>
+<button class="cta ${s?'o':''}" data-sign="${q.id}">${s?'✓ Вы записаны · отменить':full?'Встать в лист ожидания':'Записаться'}</button>`},
+mine(){const up=Q.filter(q=>S.signed[q.id]);
+return hdr('Мои квесты')+`<div class="h2">Предстоящие</div>${up.length?up.map(q=>item(q)+`<button class="cta o" style="min-height:48px;margin:8px 16px" data-qr="${q.id}">${ic('qr')}Показать код отметки</button>`).join(''):'<p class="ctr" style="padding:30px;color:var(--t2)">Пока пусто. Выберите квест на главной</p>'}
+<div class="h2">Завершённые</div>${[['У','Уборка у школы №12','Пт, 7 ноя · подтверждено, 3 ч','+90'],['С','Сбор макулатуры','Сб, 1 ноя · подтверждено, 2 ч','+60']].map(x=>`<div class="it"><span class="av">${x[0]}</span><span class="bd"><b class="tt">${x[1]}</b><span></span><span class="sb">${x[2]}</span><span class="badge">${x[3]}</span></span></div>`).join('')}`},
+qr(q){return back()+`<div class="ctr"><h1 style="margin-top:6px">Отметка на смене</h1><p style="color:var(--t2);margin-top:6px">Покажите координатору. Код обновляется каждые 30 секунд.</p>${qr()}<span class="ok">${ic('clock')}Обновится через 24 с</span><p style="color:var(--t2);margin-top:18px">${q.t}</p></div>`},
+benefit(){const sk=[['Экология',85],['Организация',72],['Работа с людьми',54]];
+return hdr('Моя выгода')+`<div class="ctr" style="padding-top:14px"><div class="big">640</div><p style="color:var(--t2);margin-top:6px">баллов · уровень 3 «Помощник»</p><div class="bar" style="max-width:240px;margin:12px auto 0;background:var(--sf)"><i style="width:80%"></i></div><p style="color:var(--t2);font-size:13px;margin-top:6px">До «Активиста» — 160 баллов</p></div>
+<div class="grp row3"><div><b>38</b><span>часов</span></div><div><b>12</b><span>квестов</span></div><div><b>4,8</b><span>оценка</span></div></div>
+<div class="h2">Навыки</div><div class="grp">${sk.map(s=>`<div class="r" style="display:block"><div style="display:flex"><b>${s[0]}</b><span class="v">${s[1]}%</span></div><div class="bar"><i style="width:${s[1]}%"></i></div></div>`).join('')}</div>
+<div class="h2">Достижения</div><div class="stories">${[['leaf','Первый шаг'],['flame','5 смен'],['tree','Зелёный друг']].map(a=>`<div class="st"><span class="av">${ic(a[0])}</span>${a[1]}</div>`).join('')}</div>
+<div class="grp"><button class="r" data-go="cert">${ic('shield')}Мой сертификат<span class="v">${ic('chev')}</span></button></div>`},
+cert(){return back()+`<div class="ctr" style="margin-top:10px"><span class="ok">${ic('shield')}Подтверждено</span><p style="color:var(--t2);margin-top:18px">Сертификат волонтёра</p><h1 style="margin-top:4px">Арман Касымов</h1><p style="margin-top:10px"><b>38 часов</b> волонтёрской работы</p><p style="color:var(--t2);font-size:13px">TazaQala · 12 квестов · с марта 2026</p>${qr()}<p style="color:var(--t2);font-size:13px">Проверить может любой — по QR или на taza.kz/verify</p></div><button class="cta o">Поделиться PDF</button>`},
+notif(){return hdr('Уведомления')+[['clock','Напоминание','Завтра в 12:00 — «Помощь приюту». Возьмите воду!','2 ч',1],['check','Часы подтверждены','Координатор подтвердил 3 часа · +90 баллов','вчера',0],['award','Новое достижение','«Зелёный друг» — 100 деревьев','2 дня',0],['leaf','Новый квест рядом','Посадка деревьев в парке','3 дня',0]].map(n=>`<div class="it"><span class="av">${ic(n[0])}</span><span class="bd"><b class="tt">${n[1]}</b><span class="tm">${n[3]}</span><span class="sb">${n[2]}</span>${n[4]?'<span class="badge">1</span>':'<span></span>'}</span></div>`).join('')},
+me(){return hdr('Профиль')+`<div class="ctr" style="padding-top:12px"><span class="av" style="width:92px;height:92px;font-size:34px;margin:0 auto 12px">АК</span><h1>Арман Касымов</h1><p style="color:var(--t2)">Волонтёр · Астана</p></div>
+<div class="grp"><div class="r">${ic('users')}Организация<span class="v">TazaQala</span></div><div class="r">${ic('globe')}Язык<span class="v">Русский</span></div><div class="r">${ic('bell')}Уведомления<span class="v">${ic('chev')}</span></div></div>`}};
+const banner=()=>M()?`<div class="grp"><div class="r">${mb}<b>Режим наставника</b><button class="ok v" data-rep>${ic('plus')}Задание</button></div></div>`:H()<15?`<div class="grp"><div class="r" style="display:block"><b>Станьте волонтёром: 15 подтверждённых часов</b><div class="bar"><i style="width:${H()/15*100}%"></i></div><span style="color:var(--t2);font-size:13px">Сейчас ${H()} из 15 ч</span></div></div>`:'';
+V.map=()=>{const L=SP.filter(s=>!S.near||s.km<=5),sp=L.find(s=>s.id===S.spot),q=sp&&sp.q&&Q.find(x=>x.id===sp.q);
+return `<div class="mapw"><svg viewBox="0 0 350 700" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"><rect width="350" height="700" fill="#F1FBD4"/><path d="M-10 470C80 420 160 500 360 410V470C170 550 90 480 -10 530z" fill="#D7FF99"/><rect x="20" y="40" width="110" height="90" rx="14" fill="#E3F6B0"/><rect x="210" y="560" width="120" height="100" rx="14" fill="#E3F6B0"/><g stroke="#fff" stroke-linecap="round" fill="none"><path d="M0 180H350M0 370H350M0 600H350M110 0V700M240 0V700" stroke-width="9"/><path d="M0 270L350 300M180 0L200 700" stroke-width="5"/></g>${L.map(s=>`<g data-spot="${s.id}" style="cursor:pointer"><circle cx="${s.x}" cy="${s.y}" r="${12+s.sv*5+(S.spot===s.id?6:0)}" fill="#8CC914" opacity=".35"/><circle cx="${s.x}" cy="${s.y}" r="12" fill="#2B8000" stroke="#fff" stroke-width="3"/><text x="${s.x}" y="${s.y+4}" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">${s.sv}</text></g>`).join('')}<circle cx="150" cy="270" r="18" fill="#8CC914" opacity=".3"><animate attributeName="r" values="10;26;10" dur="2.4s" repeatCount="indefinite"/></circle><circle cx="150" cy="270" r="8" fill="#fff" stroke="#8CC914" stroke-width="5"/></svg>
+<div class="mtop"><button class="cp ${S.near?'on':''}" data-near="1">Рядом</button><button class="cp ${!S.near?'on':''}" data-near="0">Все места</button><button class="cp" data-rep>${ic(canRep()?'camera':'lock')}Сообщить</button></div>
+${sp?`<div class="sheet"><div style="display:flex;gap:10px;align-items:flex-start"><b style="flex:1;font-size:16px">${sp.t}</b><button class="cb" data-spot="" aria-label="Закрыть" style="width:32px;height:32px">✕</button></div><p style="color:var(--t2);margin:4px 0 8px">${'●'.repeat(sp.sv)} · ${String(sp.km).replace('.',',')} км · ${sp.ago}</p><p>${sp.d}</p><p style="display:flex;gap:6px;align-items:center;color:var(--t2);font-size:13px;margin-top:8px">${mb} Фото добавил наставник Данияр С.</p><button class="cta ${q?'':'o'}" style="margin:12px 0 0;width:100%" ${q?`data-q="${q.id}"`:'data-soon="Наставник скоро создаст задание"'}>${q?'Открыть задание':'Ждёт наставника'}</button></div>`:'<div class="hint">Нажмите на точку на карте</div>'}</div>`};
+V.rating=()=>{const o=[['Дана Жумабаева',142],['Ерлан Мусин',131],['Камила Исаева',118],['Нурсултан Омаров',96],['Сабина Ким',84],['Ильяс Абдрахманов',71],['Жанна Серикова',55],['Алия Бекова',43]],all=[...o,['Вы',H()]].sort((a,b)=>b[1]-a[1]),pr=[['phone','iPhone','1 место'],['tablet','iPad','2 место'],['laptop','Ноутбук','3 место']];
+return hdr('Рейтинг')+`<div class="grp" style="background:var(--pr);color:var(--onpr)"><div class="ctr" style="padding:16px 12px 4px"><b style="font-size:17px">Призы каждые 4 месяца</b><p style="font-size:13px">Сезон сен – дек · осталось 47 дней</p></div><div class="row3">${pr.map(p=>`<div><span class="av" style="margin:0 auto 6px;background:#fff">${ic(p[0])}</span><b style="font-size:15px">${p[1]}</b><span style="color:var(--onpr)">${p[2]}</span></div>`).join('')}</div></div>
+<div>${all.map((x,i)=>{const me=x[0]==='Вы';return `<div class="it" ${me?'style="background:var(--sf)"':''}><b style="width:22px;text-align:center;color:var(--t2)">${i+1}</b><span class="av" style="width:44px;height:44px;font-size:16px">${x[0][0]}</span><span class="bd"><b class="tt">${me?'Вы · '+lab():x[0]}</b><span class="badge">${x[1]} ч</span></span></div>`}).join('')}</div>
+<div class="grp"><div class="r">${ic('users')}<div><b>Партнёр: El Omit</b><div style="color:var(--t2);font-size:13px">Хотите сотрудничать с проектом?</div></div><button class="ok v" data-soon="Заявка отправлена El Omit">Связаться</button></div></div>`};
+V.port=()=>{const h=H(),nx=h<15?15:h<115?115:0,up=Q.filter(q=>S.signed[q.id]),J=[['Уборка у школы №12','Пт, 7 ноя','3 ч','+90',1],['Сбор макулатуры','Сб, 1 ноя','2 ч','+60',1],['Высадка саженцев','Вс, 26 окт','4 ч','+120',1],['Уборка берега','Сб, 18 окт','3 ч','+90',0]],A=[['leaf','Первый шаг',h>=1],['shield','Волонтёр',h>=15],['flame','5 смен',h>=30],['tree','Зелёный друг',h>=60],['camera','Дозорный',h>=115]];
+return hdr('Портфолио')+`<div class="ctr" style="padding-top:14px"><div class="big">${h}</div><p style="color:var(--t2);margin-top:6px">подтверждённых часов · ${lab()}</p>${nx?`<div class="bar" style="max-width:240px;margin:12px auto 0;background:var(--sf)"><i style="width:${h/nx*100}%"></i></div><p style="color:var(--t2);font-size:13px;margin-top:6px">До ${nx} ч — ${nx===15?'статус волонтёра':'право сообщать о загрязнениях'}</p>`:'<p style="margin-top:8px"><span class="ok">Все права открыты</span></p>'}</div>
+<div class="grp row3"><div><b>12</b><span>квестов</span></div><div><b>4,8</b><span>оценка</span></div><div><b>${A.filter(a=>a[2]).length}</b><span>наград</span></div></div>
+${up.length?`<div class="h2">Предстоящие</div>${up.map(q=>item(q)+`<button class="cta o" style="min-height:48px;margin:8px 16px" data-qr="${q.id}">${ic('qr')}Код отметки</button>`).join('')}`:''}
+<div class="h2">Журнал часов</div>${J.map(x=>`<div class="it"><span class="av">${x[0][0]}</span><span class="bd"><b class="tt">${x[0]}</b><span class="tm">${x[1]}</span><span class="sb">${x[4]?'✓ подтверждено':'… ждёт подтверждения'} · ${x[2]}</span><span class="badge">${x[3]}</span></span></div>`).join('')}
+<div class="h2">Достижения</div><div class="stories">${A.map(a=>`<div class="st" style="opacity:${a[2]?1:.35}"><span class="av">${ic(a[2]?a[0]:'lock')}</span>${a[1]}</div>`).join('')}</div>
+<div class="grp"><button class="r" data-go="cert">${ic('shield')}Мой сертификат<span class="v">${ic('chev')}</span></button></div>`};
+V.me=()=>{const h=H(),rows=[['Статус волонтёра','с 15 подтверждённых часов',h>=15||M()],['Сообщать о загрязнениях','с 115 часов',canRep()]];
+return hdr('Профиль')+`<div class="ctr" style="padding-top:12px"><span class="av" style="width:92px;height:92px;font-size:34px;margin:0 auto 12px;position:relative">АК${M()?`<span class="mb" style="position:absolute;right:-2px;bottom:-2px;width:30px;height:30px;border:3px solid #fff">${ic('shield')}</span>`:''}</span><h1>Арман Касымов</h1><p style="color:var(--t2)">${lab()} · ${h} ч</p></div>
+<div class="h2">Права</div><div class="grp">${rows.map(r=>`<div class="r">${ic(r[2]?'check':'lock')}<div><b>${r[0]}</b><div style="color:var(--t2);font-size:13px">${r[1]}</div></div></div>`).join('')}<div class="r">${mb}<div><b>Значок наставника</b><div style="color:var(--t2);font-size:13px">Создаёт задания и добавляет фото загрязнений</div></div></div></div>
+<div class="h2">Демо: сменить роль</div><div class="seg">${[['new','Новичок'],['vol','Волонтёр'],['pro','115+ ч'],['mentor','Наставник']].map(r=>`<button class="${S.role===r[0]?'on':''}" data-role="${r[0]}">${r[1]}</button>`).join('')}</div>
+<div class="grp"><div class="r">${ic('users')}Организация<span class="v">TazaQala</span></div><div class="r">${ic('globe')}Язык<span class="v">Русский</span></div></div>`};
+V.report=()=>back()+`<div class="ctr"><h1 style="margin-top:6px">${M()?'Новое задание':'Сообщить о загрязнении'}</h1><p style="color:var(--t2);margin-top:6px">${M()?'Волонтёры увидят задание и выберут время':'Наставники проверят и создадут задание'}</p></div><button class="grp" data-soon="Камера откроется в приложении" style="display:block;width:calc(100% - 32px);border:2px dashed var(--pr);background:#fff;padding:30px;text-align:center">${ic('camera')}<div style="font-weight:800;margin-top:6px">Добавить фото</div></button>
+<div class="h2">Серьёзность</div><div class="seg">${[1,2,3].map(n=>`<button class="${S.sev===n?'on':''}" data-sev="${n}">${'●'.repeat(n)}</button>`).join('')}</div>
+<div class="grp"><div class="r">${ic('pin')}Рядом с вами · Астана</div><div class="r"><textarea placeholder="Опишите проблему" style="width:100%;border:0;background:none;font:inherit;color:inherit;resize:none;outline:0" rows="3"></textarea></div></div>
+<button class="cta" data-done="1">${M()?'Опубликовать задание':'Отправить наставникам'}</button>`;
+
+const tabs=[['home','Квесты','home'],['map','Карта','map'],['rating','Рейтинг','trophy'],['port','Портфолио','doc'],['me','Профиль','user']];
+function render(){const v=$('#view'),k=S.scr&&S.scr.k;let h;
+if(k==='q')h=V.detail(Q.find(q=>q.id==S.scr.id));else if(k==='qr')h=V.qr(Q.find(q=>q.id==S.scr.id));else if(k==='cert')h=V.cert();else if(k==='rep')h=V.report();else h=V[S.tab]();
+const sc=v.scrollTop,same=v.dataset.s===S.tab+k;v.style.animation=same?'none':'';v.innerHTML=h;v.dataset.s=S.tab+k;v.scrollTop=same?sc:0;
+$('#phone').classList.toggle('sub',!!k);v.className='view'+(S.tab==='map'&&!k?' mp':'');
+$('#pill').innerHTML=tabs.map(t=>`<button class="${S.tab===t[0]?'on':''}" data-tab="${t[0]}">${ic(t[2])}${t[1]}</button>`).join('');
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-tab],[data-q],[data-back],[data-sign],[data-qr],[data-go],[data-f],[data-org],[data-search],[data-spot],[data-near],[data-role],[data-sev],[data-rep],[data-soon],[data-done]');if(!b)return;const d=b.dataset;
+if(d.tab){S.tab=d.tab;S.scr=null}else if(d.q)S.scr={k:'q',id:d.q};else if(d.qr)S.scr={k:'qr',id:d.qr};else if(d.go)S.scr={k:'cert'};else if('back' in d)S.scr=null;
+else if(d.f)S.filter=d.f;else if('org' in d)S.org=d.org||null;else if('search' in d)toast('Поиск — в следующей версии');else if('spot' in d)S.spot=d.spot||null;else if('near' in d)S.near=d.near==='1';else if('role' in d)S.role=d.role;else if('sev' in d)S.sev=+d.sev;else if('soon' in d)toast(d.soon);else if('done' in d){S.scr=null;toast(M()?'Задание опубликовано':'Отправлено наставникам')}else if('rep' in d){if(canRep())S.scr={k:'rep'};else{toast('Откроется с 115 ч — у вас '+H()+' ч');return}}
+else if(d.sign){const id=d.sign;if(S.signed[id]){delete S.signed[id];toast('Запись отменена')}else{S.signed[id]=1;toast('Вы записаны! Напомним за 24 часа')}}
+render()});
+render();
+</script>
+</body>
+</html>
